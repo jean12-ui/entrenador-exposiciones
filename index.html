@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PoC - Reconocimiento de Voz</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #1e293b;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            border: 1px solid #334155;
+        }
+        h1 { font-size: 1.5rem; margin-bottom: 1rem; color: #818cf8; }
+        p { color: #94a3b8; font-size: 0.9rem; }
+        button {
+            background-color: #22c55e;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: background 0.2s ease;
+        }
+        button:hover { background-color: #16a34a; }
+        .recording { background-color: #ef4444 !important; }
+        #output {
+            background-color: #090d16;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            min-height: 100px;
+            text-align: left;
+            font-size: 0.95rem;
+            color: #cbd5e1;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Simulador de audio por voz  (PoC)</h1>
+        <p>Presiona el botón para probar la captura de voz en tiempo real:</p>
+        
+        <button id="btnToggle">🎙️ Iniciar Escucha</button>
+
+        <div id="output">Esperando activación del micrófono...</div>
+    </div>
+
+    <script>
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if (!SpeechRecognition) {
+            alert("Tu navegador no soporta reconocimiento de voz. Usa Google Chrome o Microsoft Edge.");
+        } else {
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'es-PE';
+            recognition.continuous = true;
+            recognition.interimResults = true;
+
+            const btnToggle = document.getElementById('btnToggle');
+            const output = document.getElementById('output');
+            let isListening = false;
+
+            btnToggle.addEventListener('click', () => {
+                if (!isListening) {
+                    recognition.start();
+                    btnToggle.textContent = '⏹ Detener Escucha';
+                    btnToggle.classList.add('recording');
+                    output.textContent = 'Escuchando... habla ahora.';
+                    isListening = true;
+                } else {
+                    recognition.stop();
+                    btnToggle.textContent = '🎙️ Iniciar Escucha';
+                    btnToggle.classList.remove('recording');
+                    isListening = false;
+                }
+            });
+
+            recognition.onresult = (event) => {
+                let transcript = '';
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    transcript += event.results[i][0].transcript;
+                }
+                output.textContent = transcript;
+            };
+
+            recognition.onerror = (event) => {
+                console.error("Error:", event.error);
+                if (event.error === 'not-allowed') {
+                    alert("Permiso de micrófono denegado.");
+                }
+            };
+        }
+    </script>
+</body>
+</html>
