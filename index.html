@@ -3,69 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PoC - Reconocimiento de Voz</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #0f172a;
-            color: #f8fafc;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-        }
-        .container {
-            background-color: #1e293b;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
-            max-width: 500px;
-            width: 90%;
-            text-align: center;
-            border: 1px solid #334155;
-        }
-        h1 { font-size: 1.5rem; margin-bottom: 1rem; color: #818cf8; }
-        p { color: #94a3b8; font-size: 0.9rem; }
-        button {
-            background-color: #22c55e;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            font-size: 1rem;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 1rem;
-            transition: background 0.2s ease;
-        }
-        button:hover { background-color: #16a34a; }
-        .recording { background-color: #ef4444 !important; }
-        #output {
-            background-color: #090d16;
-            border: 1px solid #334155;
-            border-radius: 8px;
-            padding: 1rem;
-            margin-top: 1.5rem;
-            min-height: 100px;
-            text-align: left;
-            font-size: 0.95rem;
-            color: #cbd5e1;
-            word-wrap: break-word;
-        }
-    </style>
+    <title>Simulador Anti-Palta - Entrenador de Exposiciones</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col font-sans">
 
-    <div class="container">
-        <h1>Simulador de audio por voz  (PoC)</h1>
-        <p>Presiona el botón para probar la captura de voz en tiempo real:</p>
-        
-        <button id="btnToggle">🎙️ Iniciar Escucha</button>
+    <!-- Encabezado -->
+    <header class="border-b border-slate-800 bg-slate-950/50 backdrop-blur px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <span class="text-2xl">🎙️</span>
+            <h1 class="text-xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+                Simulador Anti-Palta
+            </h1>
+        </div>
+        <div class="flex items-center gap-3">
+            <span id="pinStatus" class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs px-3 py-1 rounded-full font-medium">
+                PIN Activo: DEMO-2026
+            </span>
+        </div>
+    </header>
 
-        <div id="output">Esperando activación del micrófono...</div>
+    <!-- Contenido Principal -->
+    <main class="flex-1 max-w-5xl w-full mx-auto p-6 flex flex-col gap-6">
+
+        <!-- Tarjetas de Métricas -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Métrica: Tiempo -->
+            <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-5 flex flex-col justify-between">
+                <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Tiempo Transcurrido</span>
+                <div class="text-3xl font-bold text-indigo-400 mt-2" id="timer">00:00</div>
+            </div>
+
+            <!-- Métrica: Vel. Habla -->
+            <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-5 flex flex-col justify-between">
+                <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Velocidad Estimada</span>
+                <div class="text-3xl font-bold text-purple-400 mt-2"><span id="wpmCounter">0</span> <span class="text-sm font-normal text-slate-400">PPM</span></div>
+            </div>
+
+            <!-- Métrica: Muletillas -->
+            <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-5 flex flex-col justify-between">
+                <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Muletillas Detectadas</span>
+                <div class="text-3xl font-bold text-rose-400 mt-2" id="fillerCounter">0</div>
+            </div>
+        </section>
+
+        <!-- Área de Transcripción -->
+        <section class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-5 flex-1 flex flex-col min-h-[250px]">
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="text-sm font-semibold text-slate-300">Transcripción en Tiempo Real</h2>
+                <span id="listeningBadge" class="hidden items-center gap-2 text-xs text-rose-400 bg-rose-500/10 px-2.5 py-1 rounded-full border border-rose-500/20">
+                    <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span> Escuchando
+                </span>
+            </div>
+            <div id="output" class="flex-1 bg-slate-950/60 border border-slate-800 rounded-lg p-4 text-slate-300 font-mono text-sm leading-relaxed overflow-y-auto">
+                Haz clic en "Iniciar Escucha" para comenzar la práctica...
+            </div>
+        </section>
+
+        <!-- Panel de Control Principal -->
+        <section class="flex justify-center items-center py-2">
+            <button id="btnToggle" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-emerald-900/20 transition-all flex items-center gap-3 text-lg">
+                <span>🎙️</span> <span id="btnText">Iniciar Escucha</span>
+            </button>
+        </section>
+    </main>
+
+    <!-- Modal de Validación de PIN -->
+    <div id="pinModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl max-w-md w-full shadow-2xl text-center">
+            <h3 class="text-xl font-bold text-slate-100 mb-2">Ingresa tu PIN de Acceso</h3>
+            <p class="text-sm text-slate-400 mb-6">Esta función requiere un PIN válido de la versión Freemium.</p>
+            <input type="text" id="pinInput" placeholder="Ej: PALTA2026" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-center text-lg font-mono text-slate-100 tracking-wider mb-4 focus:outline-none focus:border-indigo-500">
+            <button id="btnValidatePin" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 rounded-xl transition">
+                Validar PIN
+            </button>
+        </div>
     </div>
 
+    <!-- Script de Captura de Voz y Detección de Muletillas -->
+    <!-- Script de Captura de Voz, Detección Avanzada de Muletillas, Repeticiones y PIN -->
     <script>
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
@@ -77,38 +94,151 @@
             recognition.continuous = true;
             recognition.interimResults = true;
 
+            // Elementos del DOM
             const btnToggle = document.getElementById('btnToggle');
+            const btnText = document.getElementById('btnText');
             const output = document.getElementById('output');
-            let isListening = false;
+            const listeningBadge = document.getElementById('listeningBadge');
+            const timerEl = document.getElementById('timer');
+            const wpmCounterEl = document.getElementById('wpmCounter');
+            const fillerCounterEl = document.getElementById('fillerCounter');
+            
+            // Elementos del Modal de PIN
+            const pinModal = document.getElementById('pinModal');
+            const pinInput = document.getElementById('pinInput');
+            const btnValidatePin = document.getElementById('btnValidatePin');
+            const pinStatus = document.getElementById('pinStatus');
 
+            const VALID_PINS = ['PALTA2026', 'DEMO-2026', 'EXPO100'];
+            let isPinUnlocked = false;
+
+            // Lista ampliada de muletillas y sonidos de duda
+            const FILLER_WORDS = [
+                'este', 'estee', 'estooo', 'esto', 
+                'o sea', 'osea', 
+                'nada', 'eh', 'ehh', 'eee', 'ee', 'em', 'emm', 'mmm',
+                'bueno', 'mira', 'sabes', 'tipo', 'ya', 'ajá'
+            ];
+
+            let isListening = false;
+            let startTime = null;
+            let timerInterval = null;
+
+            // Validación de PIN
+            btnValidatePin.addEventListener('click', () => {
+                const enteredPin = pinInput.value.trim().toUpperCase();
+                if (VALID_PINS.includes(enteredPin)) {
+                    isPinUnlocked = true;
+                    pinModal.classList.add('hidden');
+                    pinStatus.textContent = `PIN Activo: ${enteredPin}`;
+                    alert("¡PIN Validado correctamente! Ya puedes usar el simulador.");
+                } else {
+                    alert("PIN inválido. Ingresa un PIN correcto (Ej: PALTA2026).");
+                }
+            });
+
+            function formatTime(seconds) {
+                const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+                const secs = (seconds % 60).toString().padStart(2, '0');
+                return `${mins}:${secs}`;
+            }
+
+            function startTimer() {
+                startTime = Date.now();
+                timerInterval = setInterval(() => {
+                    const elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
+                    timerEl.textContent = formatTime(elapsedSeconds);
+                }, 1000);
+            }
+
+            function stopTimer() {
+                clearInterval(timerInterval);
+            }
+
+            // Analizador en tiempo real
+            function processTranscript(rawText) {
+                if (!rawText.trim()) return;
+
+                // 1. Conteo de palabras totales y Velocidad (PPM)
+                const wordsArray = rawText.trim().split(/\s+/);
+                const totalWords = wordsArray.length;
+                const elapsedMinutes = Math.max((Date.now() - startTime) / 60000, 1 / 60);
+                const wpm = Math.round(totalWords / elapsedMinutes);
+                wpmCounterEl.textContent = isFinite(wpm) ? wpm : 0;
+
+                let fillerCount = 0;
+                let processedText = rawText;
+
+                // 2. DETECCIÓN A: Palabras repetidas consecutivamente (ej: "y y", "que que", "de de")
+                const repeatRegex = /\b(\w+)\s+\1\b/gi;
+                const repeatMatches = rawText.match(repeatRegex);
+                if (repeatMatches) {
+                    fillerCount += repeatMatches.length;
+                    processedText = processedText.replace(repeatRegex, '<mark class="bg-amber-500/30 text-amber-300 font-semibold px-1 rounded border border-amber-500/40">$1 $1</mark>');
+                }
+
+                // 3. DETECCIÓN B: Lista de muletillas y vocalizaciones ("este", "eee", "o sea", "bueno")
+                FILLER_WORDS.forEach(filler => {
+                    const regex = new RegExp(`\\b(${filler})\\b`, 'gi');
+                    const matches = rawText.match(regex);
+                    if (matches) {
+                        fillerCount += matches.length;
+                    }
+                    processedText = processedText.replace(regex, '<mark class="bg-rose-500/30 text-rose-300 font-semibold px-1 rounded border border-rose-500/40">$1</mark>');
+                });
+
+                fillerCounterEl.textContent = fillerCount;
+                output.innerHTML = processedText;
+            }
+
+            // Control del botón principal
             btnToggle.addEventListener('click', () => {
+                if (!isPinUnlocked) {
+                    pinModal.classList.remove('hidden');
+                    return;
+                }
+
                 if (!isListening) {
-                    recognition.start();
-                    btnToggle.textContent = '⏹ Detener Escucha';
-                    btnToggle.classList.add('recording');
-                    output.textContent = 'Escuchando... habla ahora.';
-                    isListening = true;
+                    try {
+                        recognition.start();
+                        btnText.textContent = 'Detener Escucha';
+                        btnToggle.classList.replace('bg-emerald-600', 'bg-rose-600');
+                        btnToggle.classList.replace('hover:bg-emerald-500', 'hover:bg-rose-500');
+                        listeningBadge.classList.remove('hidden');
+                        listeningBadge.classList.add('flex');
+                        output.textContent = 'Escuchando... habla ahora.';
+                        
+                        timerEl.textContent = '00:00';
+                        wpmCounterEl.textContent = '0';
+                        fillerCounterEl.textContent = '0';
+                        startTimer();
+                        
+                        isListening = true;
+                    } catch (err) {
+                        console.error("Error al iniciar reconocimiento:", err);
+                    }
                 } else {
                     recognition.stop();
-                    btnToggle.textContent = '🎙️ Iniciar Escucha';
-                    btnToggle.classList.remove('recording');
+                    btnText.textContent = 'Iniciar Escucha';
+                    btnToggle.classList.replace('bg-rose-600', 'bg-emerald-600');
+                    btnToggle.classList.replace('hover:bg-rose-500', 'hover:bg-emerald-500');
+                    listeningBadge.classList.add('hidden');
+                    listeningBadge.classList.remove('flex');
+                    stopTimer();
                     isListening = false;
                 }
             });
 
             recognition.onresult = (event) => {
                 let transcript = '';
-                for (let i = event.resultIndex; i < event.results.length; i++) {
+                for (let i = 0; i < event.results.length; i++) {
                     transcript += event.results[i][0].transcript;
                 }
-                output.textContent = transcript;
+                processTranscript(transcript);
             };
 
             recognition.onerror = (event) => {
-                console.error("Error:", event.error);
-                if (event.error === 'not-allowed') {
-                    alert("Permiso de micrófono denegado.");
-                }
+                console.error("Error de reconocimiento:", event.error);
             };
         }
     </script>
