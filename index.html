@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador para Exposiciones</title>
+    <title>Simulador para Exposiciones - Pro Coach</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -13,8 +13,8 @@
     <header class="border-b border-slate-800 bg-slate-950/50 backdrop-blur px-6 py-4 flex justify-between items-center">
         <div class="flex items-center gap-3">
             <span class="text-2xl">🎙️</span>
-            <h1 class="text-xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-                Simulador para Exposiciones
+            <h1 class="text-xl font-bold bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                Simulador para Exposiciones <span class="text-xs font-semibold uppercase tracking-wider bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2 py-0.5 rounded-full ml-2">PRO Coach</span>
             </h1>
         </div>
         <div class="flex items-center gap-3">
@@ -25,39 +25,70 @@
     </header>
 
     <!-- Contenido Principal -->
-    <main class="flex-1 max-w-5xl w-full mx-auto p-6 flex flex-col gap-6">
+    <main class="flex-1 max-w-6xl w-full mx-auto p-6 flex flex-col gap-6">
 
         <!-- Tarjetas de Métricas -->
-        <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <!-- Métrica: Tiempo -->
-            <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-5 flex flex-col justify-between">
-                <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Tiempo Transcurrido</span>
+            <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-4 flex flex-col justify-between">
+                <div class="flex justify-between items-center">
+                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Tiempo</span>
+                    <select id="timeGoalSelect" class="bg-slate-950 border border-slate-700 text-xs text-slate-300 rounded px-1.5 py-0.5 focus:outline-none">
+                        <option value="0">Sin límite</option>
+                        <option value="120">2 min</option>
+                        <option value="300" selected>5 min</option>
+                        <option value="600">10 min</option>
+                    </select>
+                </div>
                 <div class="text-3xl font-bold text-indigo-400 mt-2" id="timer">00:00</div>
             </div>
 
             <!-- Métrica: Vel. Habla -->
-            <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-5 flex flex-col justify-between">
-                <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Velocidad Estimada</span>
+            <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-4 flex flex-col justify-between">
+                <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Velocidad</span>
                 <div class="text-3xl font-bold text-purple-400 mt-2"><span id="wpmCounter">0</span> <span class="text-sm font-normal text-slate-400">PPM</span></div>
             </div>
 
             <!-- Métrica: Muletillas -->
-            <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-5 flex flex-col justify-between">
-                <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Muletillas Detectadas</span>
+            <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-4 flex flex-col justify-between">
+                <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Muletillas</span>
                 <div class="text-3xl font-bold text-rose-400 mt-2" id="fillerCounter">0</div>
+            </div>
+
+            <!-- Métrica: Tono Informal / Jerga -->
+            <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-4 flex flex-col justify-between">
+                <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Informalismos</span>
+                <div class="text-3xl font-bold text-amber-400 mt-2" id="slangCounter">0</div>
             </div>
         </section>
 
-        <!-- Área de Transcripción -->
-        <section class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-5 flex-1 flex flex-col min-h-[220px]">
-            <div class="flex justify-between items-center mb-3">
-                <h2 class="text-sm font-semibold text-slate-300">Transcripción en Tiempo Real</h2>
-                <span id="listeningBadge" class="hidden items-center gap-2 text-xs text-rose-400 bg-rose-500/10 px-2.5 py-1 rounded-full border border-rose-500/20">
-                    <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span> Escuchando
-                </span>
+        <!-- Bloque Central: Guion + Transcripción -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            
+            <!-- Panel Guion de Apoyo / Teleprompter -->
+            <div class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-5 flex flex-col gap-3">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-sm font-semibold text-slate-300 flex items-center gap-2">
+                        <span>📄</span> Guion de Exposición (Opcional)
+                    </h2>
+                    <span class="text-xs text-slate-400">Compara lectura vs. improvisación</span>
+                </div>
+                <textarea id="scriptInput" placeholder="Pega aquí el texto de tu presentación o diapositivas para medir qué tanto lees de memoria..." class="w-full h-44 bg-slate-950/70 border border-slate-800 rounded-lg p-3 text-xs font-mono text-slate-300 resize-none focus:outline-none focus:border-indigo-500/80 leading-relaxed"></textarea>
             </div>
-            <div id="output" class="flex-1 bg-slate-950/60 border border-slate-800 rounded-lg p-4 text-slate-300 font-mono text-sm leading-relaxed overflow-y-auto min-h-[140px]">
-                Haz clic en "Iniciar Escucha" para comenzar la práctica...
+
+            <!-- Área de Transcripción -->
+            <div class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-5 flex flex-col">
+                <div class="flex justify-between items-center mb-3">
+                    <h2 class="text-sm font-semibold text-slate-300 flex items-center gap-2">
+                        <span>💬</span> Transcripción en Tiempo Real
+                    </h2>
+                    <span id="listeningBadge" class="hidden items-center gap-2 text-xs text-rose-400 bg-rose-500/10 px-2.5 py-1 rounded-full border border-rose-500/20">
+                        <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span> Escuchando
+                    </span>
+                </div>
+                <div id="output" class="flex-1 bg-slate-950/70 border border-slate-800 rounded-lg p-3.5 text-slate-300 font-mono text-xs leading-relaxed overflow-y-auto max-h-44">
+                    Haz clic en "Iniciar Escucha" para comenzar la práctica...
+                </div>
             </div>
         </section>
 
@@ -65,22 +96,31 @@
         <section class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-5 flex flex-col gap-3">
             <div class="flex justify-between items-center flex-wrap gap-2">
                 <h2 class="text-sm font-semibold text-slate-300 flex items-center gap-2">
-                    <span>⚙️</span> Personalizar Muletillas a Detectar
+                    <span>⚙️</span> Diccionario de Muletillas y Sonidos de Duda
                 </h2>
-                <span class="text-xs text-slate-400">Haz clic en ✕ para eliminar o agrega nuevas abajo</span>
+                <span class="text-xs text-slate-400">Haz clic en ✕ para eliminar</span>
             </div>
             
-            <!-- Lista de etiquetas de muletillas -->
-            <div id="fillersTagsContainer" class="flex flex-wrap gap-2 py-1 max-h-28 overflow-y-auto">
-                <!-- Se cargan dinámicamente -->
-            </div>
+            <div id="fillersTagsContainer" class="flex flex-wrap gap-2 py-1 max-h-24 overflow-y-auto"></div>
 
-            <!-- Formulario para agregar muletilla -->
             <div class="flex gap-2 mt-1">
-                <input type="text" id="newFillerInput" placeholder="Ej: literalmente, de alguna manera..." class="flex-1 bg-slate-950 border border-slate-700/80 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
-                <button id="btnAddFiller" class="bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium px-4 py-2 rounded-lg transition">
+                <input type="text" id="newFillerInput" placeholder="Ej: literalmente, de alguna manera..." class="flex-1 bg-slate-950 border border-slate-700/80 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
+                <button id="btnAddFiller" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium px-4 py-2 rounded-lg transition">
                     + Agregar
                 </button>
+            </div>
+        </section>
+
+        <!-- Historial de Prácticas -->
+        <section class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-5 flex flex-col gap-3">
+            <div class="flex justify-between items-center">
+                <h2 class="text-sm font-semibold text-slate-300 flex items-center gap-2">
+                    <span>📈</span> Historial de Prácticas Recientes
+                </h2>
+                <button id="btnClearHistory" class="text-xs text-slate-400 hover:text-rose-400 transition">Limpiar Historial</button>
+            </div>
+            <div id="historyContainer" class="text-xs text-slate-400 space-y-2 max-h-36 overflow-y-auto">
+                No hay prácticas grabadas aún.
             </div>
         </section>
 
@@ -92,7 +132,7 @@
         </section>
     </main>
 
-    <!-- Modal de Validación de PIN -->
+    <!-- Modal PIN -->
     <div id="pinModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
         <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl max-w-md w-full shadow-2xl text-center">
             <h3 class="text-xl font-bold text-slate-100 mb-2">Ingresa tu PIN de Acceso</h3>
@@ -104,45 +144,55 @@
         </div>
     </div>
 
-    <!-- Modal de Reporte Post-Exposición -->
+    <!-- Modal de Reporte Post-Exposición (PRO Coach) -->
     <div id="reportModal" class="hidden fixed inset-0 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 z-50">
-        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl max-w-lg w-full shadow-2xl flex flex-col gap-5">
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl max-w-xl w-full shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-slate-800 pb-3">
                 <h3 class="text-xl font-bold text-indigo-400 flex items-center gap-2">
-                    <span>📊</span> Reporte de Exposición
+                    <span>🏆</span> Reporte PRO Coach
                 </h3>
                 <span id="reportScore" class="text-2xl font-extrabold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-xl">--/100</span>
             </div>
 
-            <div class="grid grid-cols-2 gap-3 text-sm">
-                <div class="bg-slate-950/50 p-3 rounded-lg border border-slate-800">
-                    <span class="text-xs text-slate-400 block">Duración Total</span>
-                    <strong id="repDuration" class="text-lg text-slate-200">00:00</strong>
+            <div class="grid grid-cols-3 gap-3 text-xs">
+                <div class="bg-slate-950/50 p-3 rounded-lg border border-slate-800 text-center">
+                    <span class="text-slate-400 block mb-1">Duración</span>
+                    <strong id="repDuration" class="text-base text-slate-200">00:00</strong>
                 </div>
-                <div class="bg-slate-950/50 p-3 rounded-lg border border-slate-800">
-                    <span class="text-xs text-slate-400 block">Velocidad Promedio</span>
-                    <strong id="repWPM" class="text-lg text-slate-200">0 PPM</strong>
+                <div class="bg-slate-950/50 p-3 rounded-lg border border-slate-800 text-center">
+                    <span class="text-slate-400 block mb-1">Velocidad</span>
+                    <strong id="repWPM" class="text-base text-slate-200">0 PPM</strong>
+                </div>
+                <div class="bg-slate-950/50 p-3 rounded-lg border border-slate-800 text-center">
+                    <span class="text-slate-400 block mb-1">Coincidencia Guion</span>
+                    <strong id="repScriptMatch" class="text-base text-indigo-400">N/A</strong>
                 </div>
             </div>
 
-            <div class="bg-slate-950/50 p-4 rounded-lg border border-slate-800 flex flex-col gap-1">
-                <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Diagnóstico de Ritmo</span>
-                <p id="repDiagnosis" class="text-sm font-medium text-slate-300">--</p>
+            <!-- Diagnóstico de Ritmo y Tono -->
+            <div class="bg-slate-950/50 p-3.5 rounded-lg border border-slate-800 flex flex-col gap-1 text-xs">
+                <span class="font-semibold text-slate-400 uppercase tracking-wider">Diagnóstico de Oratoria</span>
+                <p id="repDiagnosis" class="text-slate-300 font-medium leading-relaxed">--</p>
             </div>
 
-            <div class="bg-slate-950/50 p-4 rounded-lg border border-slate-800 flex flex-col gap-2">
-                <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Desglose de Muletillas</span>
-                <div id="repFillersList" class="text-sm text-slate-300 max-h-32 overflow-y-auto space-y-1">
-                    Sin muletillas registradas.
+            <!-- Desglose de Muletillas e Informalismos -->
+            <div class="grid grid-cols-2 gap-3 text-xs">
+                <div class="bg-slate-950/50 p-3 rounded-lg border border-slate-800 flex flex-col gap-1">
+                    <span class="font-semibold text-slate-400 uppercase">Muletillas Detectadas</span>
+                    <div id="repFillersList" class="text-slate-300 max-h-24 overflow-y-auto space-y-1">Sin observaciones.</div>
+                </div>
+                <div class="bg-slate-950/50 p-3 rounded-lg border border-slate-800 flex flex-col gap-1">
+                    <span class="font-semibold text-slate-400 uppercase">Lenguaje Informal</span>
+                    <div id="repSlangList" class="text-slate-300 max-h-24 overflow-y-auto space-y-1">Sin informalismos.</div>
                 </div>
             </div>
 
             <div class="flex gap-3 pt-2">
-                <button id="btnCopyReport" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold py-2.5 rounded-xl transition text-sm flex items-center justify-center gap-2">
+                <button id="btnCopyReport" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold py-2.5 rounded-xl transition text-xs flex items-center justify-center gap-2">
                     📋 Copiar Reporte
                 </button>
-                <button id="btnCloseReport" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2.5 rounded-xl transition text-sm">
-                    Aceptar y Reiniciar
+                <button id="btnCloseReport" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2.5 rounded-xl transition text-xs">
+                    Cerrar y Reiniciar
                 </button>
             </div>
         </div>
@@ -168,7 +218,10 @@
             const timerEl = document.getElementById('timer');
             const wpmCounterEl = document.getElementById('wpmCounter');
             const fillerCounterEl = document.getElementById('fillerCounter');
-            
+            const slangCounterEl = document.getElementById('slangCounter');
+            const timeGoalSelect = document.getElementById('timeGoalSelect');
+            const scriptInput = document.getElementById('scriptInput');
+
             // Modal PIN
             const pinModal = document.getElementById('pinModal');
             const pinInput = document.getElementById('pinInput');
@@ -180,36 +233,47 @@
             const reportScore = document.getElementById('reportScore');
             const repDuration = document.getElementById('repDuration');
             const repWPM = document.getElementById('repWPM');
+            const repScriptMatch = document.getElementById('repScriptMatch');
             const repDiagnosis = document.getElementById('repDiagnosis');
             const repFillersList = document.getElementById('repFillersList');
+            const repSlangList = document.getElementById('repSlangList');
             const btnCopyReport = document.getElementById('btnCopyReport');
             const btnCloseReport = document.getElementById('btnCloseReport');
 
-            // Gestión de Muletillas
+            // Gestión Muletillas
             const fillersTagsContainer = document.getElementById('fillersTagsContainer');
             const newFillerInput = document.getElementById('newFillerInput');
             const btnAddFiller = document.getElementById('btnAddFiller');
 
+            // Historial
+            const historyContainer = document.getElementById('historyContainer');
+            const btnClearHistory = document.getElementById('btnClearHistory');
+
             const VALID_PINS = ['PALTA2026', 'DEMO-2026', 'EXPO100'];
             let isPinUnlocked = false;
 
-            // Lista inicial o cargada de localStorage
             const defaultFillers = [
                 'este', 'estee', 'estooo', 'esto', 
-                'o sea', 'osea', 
-                'nada', 'eh', 'ehh', 'eee', 'ee', 'em', 'emm', 'mmm',
+                'o sea', 'osea', 'nada', 'eh', 'ehh', 'eee', 'ee', 'em', 'emm', 'mmm',
                 'bueno', 'mira', 'sabes', 'tipo', 'ya', 'ajá'
             ];
 
+            // Palabras o modismos informales a corregir para exposiciones formales
+            const SLANG_WORDS = [
+                'osea', 'o sea', 'tipo', 'literal', 'literalmente', 'man', 'causa', 
+                'al toque', 'ch&eacute;vere', 'chevere', 'pue', 'pe', 'mira', 'nada'
+            ];
+
             let fillerWords = JSON.parse(localStorage.getItem('custom_fillers')) || defaultFillers;
+            let practiceHistory = JSON.parse(localStorage.getItem('practice_history')) || [];
 
             let isListening = false;
             let startTime = null;
             let timerInterval = null;
             let totalSecondsElapsed = 0;
             let detectedFillersMap = {};
+            let detectedSlangMap = {};
 
-            // Renderizar etiquetas de muletillas en pantalla
             function renderFillerTags() {
                 fillersTagsContainer.innerHTML = '';
                 fillerWords.forEach((word, index) => {
@@ -224,7 +288,6 @@
                 localStorage.setItem('custom_fillers', JSON.stringify(fillerWords));
             }
 
-            // Agregar muletilla
             function addFiller() {
                 const val = newFillerInput.value.trim().toLowerCase();
                 if (val && !fillerWords.includes(val)) {
@@ -234,7 +297,6 @@
                 }
             }
 
-            // Eliminar muletilla
             window.removeFiller = function(index) {
                 fillerWords.splice(index, 1);
                 renderFillerTags();
@@ -245,8 +307,35 @@
                 if (e.key === 'Enter') addFiller();
             });
 
-            // Inicializar renderizado de muletillas
             renderFillerTags();
+
+            function renderHistory() {
+                if (practiceHistory.length === 0) {
+                    historyContainer.innerHTML = '<p class="text-slate-500 italic text-xs">No hay prácticas grabadas aún.</p>';
+                    return;
+                }
+                historyContainer.innerHTML = practiceHistory.slice(-5).reverse().map(item => `
+                    <div class="flex justify-between items-center bg-slate-950/60 border border-slate-800 p-2.5 rounded-lg text-xs">
+                        <div>
+                            <span class="text-indigo-400 font-semibold">${item.date}</span> - 
+                            <span class="text-slate-300">${item.duration}</span> | 
+                            <span class="text-purple-300">${item.wpm} PPM</span>
+                        </div>
+                        <div class="flex gap-2 items-center">
+                            <span class="text-rose-400 font-medium">${item.fillers} mul.</span>
+                            <span class="bg-emerald-500/10 text-emerald-400 font-bold px-2 py-0.5 rounded border border-emerald-500/20">${item.score}/100</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            btnClearHistory.addEventListener('click', () => {
+                practiceHistory = [];
+                localStorage.removeItem('practice_history');
+                renderHistory();
+            });
+
+            renderHistory();
 
             btnValidatePin.addEventListener('click', () => {
                 const enteredPin = pinInput.value.trim().toUpperCase();
@@ -254,9 +343,9 @@
                     isPinUnlocked = true;
                     pinModal.classList.add('hidden');
                     pinStatus.textContent = `PIN Activo: ${enteredPin}`;
-                    alert("¡PIN Validado correctamente! Ya puedes usar el simulador.");
+                    alert("¡PIN Validado correctamente!");
                 } else {
-                    alert("PIN inválido. Ingresa un PIN correcto (Ej: PALTA2026).");
+                    alert("PIN inválido. Ejemplo: PALTA2026.");
                 }
             });
 
@@ -268,9 +357,16 @@
 
             function startTimer() {
                 startTime = Date.now();
+                const goalSeconds = parseInt(timeGoalSelect.value);
+
                 timerInterval = setInterval(() => {
                     totalSecondsElapsed = Math.floor((Date.now() - startTime) / 1000);
                     timerEl.textContent = formatTime(totalSecondsElapsed);
+
+                    if (goalSeconds > 0 && totalSecondsElapsed >= goalSeconds) {
+                        alert("⏱️ ¡Alcanzaste el límite de tiempo configurado!");
+                        btnToggle.click();
+                    }
                 }, 1000);
             }
 
@@ -288,8 +384,10 @@
                 wpmCounterEl.textContent = isFinite(wpm) ? wpm : 0;
 
                 let fillerCount = 0;
+                let slangCount = 0;
                 let processedText = rawText;
                 detectedFillersMap = {};
+                detectedSlangMap = {};
 
                 // A: Repeticiones consecutivas
                 const repeatRegex = /\b(\w+)\s+\1\b/gi;
@@ -303,7 +401,7 @@
                     processedText = processedText.replace(repeatRegex, '<mark class="bg-amber-500/30 text-amber-300 font-semibold px-1 rounded border border-amber-500/40">$1 $1</mark>');
                 }
 
-                // B: Muletillas dinámicas
+                // B: Muletillas
                 fillerWords.forEach(filler => {
                     const regex = new RegExp(`\\b(${filler})\\b`, 'gi');
                     const matches = rawText.match(regex);
@@ -314,49 +412,119 @@
                     processedText = processedText.replace(regex, '<mark class="bg-rose-500/30 text-rose-300 font-semibold px-1 rounded border border-rose-500/40">$1</mark>');
                 });
 
+                // C: Informalismos / Jerga
+                SLANG_WORDS.forEach(slang => {
+                    const regex = new RegExp(`\\b(${slang})\\b`, 'gi');
+                    const matches = rawText.match(regex);
+                    if (matches) {
+                        slangCount += matches.length;
+                        detectedSlangMap[slang] = (detectedSlangMap[slang] || 0) + matches.length;
+                    }
+                });
+
                 fillerCounterEl.textContent = fillerCount;
+                slangCounterEl.textContent = slangCount;
                 output.innerHTML = processedText;
+            }
+
+            // Cálculo de coincidencia con guion (Modo Lectura vs Improvisación)
+            function calculateScriptCoincidence(spokenText, scriptText) {
+                if (!scriptText.trim()) return null;
+                
+                const spokenWords = new Set(spokenText.toLowerCase().match(/\b\w+\b/g) || []);
+                const scriptWords = scriptText.toLowerCase().match(/\b\w+\b/g) || [];
+                if (scriptWords.length === 0) return null;
+
+                let matches = 0;
+                scriptWords.forEach(word => {
+                    if (spokenWords.has(word)) matches++;
+                });
+
+                return Math.round((matches / scriptWords.length) * 100);
             }
 
             function generateReport() {
                 const finalWPM = parseInt(wpmCounterEl.textContent) || 0;
                 const totalFillers = parseInt(fillerCounterEl.textContent) || 0;
+                const totalSlang = parseInt(slangCounterEl.textContent) || 0;
+                const rawSpoken = output.textContent || '';
+                const scriptText = scriptInput.value || '';
 
-                let score = 100 - (totalFillers * 5);
-                if (finalWPM < 100 || finalWPM > 170) score -= 15;
+                const coincidence = calculateScriptCoincidence(rawSpoken, scriptText);
+
+                // Cálculo de Puntaje Global (100 base)
+                let score = 100 - (totalFillers * 4) - (totalSlang * 5);
+                if (finalWPM < 100 || finalWPM > 170) score -= 10;
+                if (coincidence !== null && coincidence > 85) score -= 10; // Penaliza lectura robótica de memoria
                 if (score < 0) score = 0;
 
-                let diagnosis = "✅ Ritmo fluido y adecuado para la audiencia.";
-                if (finalWPM < 100) diagnosis = "🐢 Velocidad lenta. Intenta hablar de forma más fluida.";
-                else if (finalWPM > 170) diagnosis = "⚡ Velocidad muy rápida. Haz pausas para que tu público asimile las ideas.";
+                // Diagnóstico integrado
+                let diagnosis = [];
+                if (finalWPM < 100) diagnosis.push("🐢 **Ritmo Lento:** Aumenta la velocidad para mantener el interés.");
+                else if (finalWPM > 170) diagnosis.push("⚡ **Demasiado Rápido:** Haz pausas estratégicas para que el público procese la información.");
+                else diagnosis.push("✅ **Ritmo Óptimo:** Velocidad adecuada para una presentación académica.");
+
+                if (coincidence !== null) {
+                    if (coincidence > 80) diagnosis.push("📖 **Alto nivel de lectura:** Trata de no depender tanto del texto del guion.");
+                    else if (coincidence >= 40) diagnosis.push("🎯 **Equilibrio fluido:** Usas tu guion como referencia sin leerlo palabra por palabra.");
+                    else diagnosis.push("💡 **Improvisación alta:** Tu discurso se aleja bastante del guion preparado.");
+                }
 
                 repDuration.textContent = formatTime(totalSecondsElapsed);
                 repWPM.textContent = `${finalWPM} PPM`;
-                repDiagnosis.textContent = diagnosis;
+                repScriptMatch.textContent = coincidence !== null ? `${coincidence}%` : 'Sin guion';
+                repDiagnosis.innerHTML = diagnosis.join('<br>');
                 reportScore.textContent = `${score}/100`;
 
-                const keys = Object.keys(detectedFillersMap);
-                if (keys.length === 0) {
-                    repFillersList.innerHTML = '<span class="text-emerald-400">¡Excelente! No se detectaron muletillas significativamente.</span>';
+                // Desglose Muletillas
+                const fillerKeys = Object.keys(detectedFillersMap);
+                if (fillerKeys.length === 0) {
+                    repFillersList.innerHTML = '<span class="text-emerald-400">Sin muletillas registradas.</span>';
                 } else {
-                    repFillersList.innerHTML = keys.map(k => 
-                        `<div class="flex justify-between border-b border-slate-800/60 py-1">
+                    repFillersList.innerHTML = fillerKeys.map(k => 
+                        `<div class="flex justify-between border-b border-slate-800/60 py-0.5">
                             <span class="capitalize text-rose-300">${k}</span>
-                            <span class="font-bold text-slate-400">${detectedFillersMap[k]} vez/veces</span>
+                            <span class="font-bold text-slate-400">${detectedFillersMap[k]}x</span>
                          </div>`
                     ).join('');
                 }
+
+                // Desglose Lenguaje Informal
+                const slangKeys = Object.keys(detectedSlangMap);
+                if (slangKeys.length === 0) {
+                    repSlangList.innerHTML = '<span class="text-emerald-400">Uso de lenguaje formal correcto.</span>';
+                } else {
+                    repSlangList.innerHTML = slangKeys.map(k => 
+                        `<div class="flex justify-between border-b border-slate-800/60 py-0.5">
+                            <span class="capitalize text-amber-300">${k}</span>
+                            <span class="font-bold text-slate-400">${detectedSlangMap[k]}x</span>
+                         </div>`
+                    ).join('');
+                }
+
+                // Guardar en Historial
+                const now = new Date();
+                const sessionRecord = {
+                    date: `${now.toLocaleDateString('es-PE')} ${now.toLocaleTimeString('es-PE', {hour: '2-digit', minute:'2-digit'})}`,
+                    duration: formatTime(totalSecondsElapsed),
+                    wpm: finalWPM,
+                    fillers: totalFillers,
+                    score: score
+                };
+                practiceHistory.push(sessionRecord);
+                localStorage.setItem('practice_history', JSON.stringify(practiceHistory));
+                renderHistory();
 
                 reportModal.classList.remove('hidden');
             }
 
             btnCopyReport.addEventListener('click', () => {
-                const textToCopy = `--- REPORTE: SIMULADOR PARA EXPOSICIONES ---
+                const textToCopy = `--- REPORTE SIMULADOR PARA EXPOSICIONES (PRO) ---
 Puntaje: ${reportScore.textContent}
 Duración: ${repDuration.textContent}
 Velocidad: ${repWPM.textContent}
-Diagnóstico: ${repDiagnosis.textContent}
-Muletillas detectadas: ${fillerCounterEl.textContent}`;
+Coincidencia Guion: ${repScriptMatch.textContent}
+Muletillas: ${fillerCounterEl.textContent} | Informalismos: ${slangCounterEl.textContent}`;
                 
                 navigator.clipboard.writeText(textToCopy);
                 alert("¡Reporte copiado al portapapeles!");
@@ -368,6 +536,7 @@ Muletillas detectadas: ${fillerCounterEl.textContent}`;
                 timerEl.textContent = '00:00';
                 wpmCounterEl.textContent = '0';
                 fillerCounterEl.textContent = '0';
+                slangCounterEl.textContent = '0';
             });
 
             btnToggle.addEventListener('click', () => {
@@ -389,6 +558,7 @@ Muletillas detectadas: ${fillerCounterEl.textContent}`;
                         timerEl.textContent = '00:00';
                         wpmCounterEl.textContent = '0';
                         fillerCounterEl.textContent = '0';
+                        slangCounterEl.textContent = '0';
                         startTimer();
                         
                         isListening = true;
