@@ -12,7 +12,7 @@
     <!-- Encabezado -->
     <header class="border-b border-slate-800 bg-slate-950/50 backdrop-blur px-6 py-4 flex justify-between items-center">
         <div class="flex items-center gap-3">
-            <span class="text-2xl cursor-pointer" id="logoIcon" title="Haz clic 5 veces para Modo Admin">🎙️</span>
+            <span class="text-2xl">🎙️</span>
             <h1 class="text-xl font-bold bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
                 Simulador para Exposiciones <span class="text-xs font-semibold uppercase tracking-wider bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2 py-0.5 rounded-full ml-2">PRO Coach</span>
             </h1>
@@ -29,7 +29,6 @@
 
         <!-- Tarjetas de Métricas -->
         <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <!-- Métrica: Tiempo -->
             <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-4 flex flex-col justify-between">
                 <div class="flex justify-between items-center">
                     <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Tiempo</span>
@@ -43,26 +42,23 @@
                 <div class="text-3xl font-bold text-indigo-400 mt-2" id="timer">00:00</div>
             </div>
 
-            <!-- Métrica: Vel. Habla -->
             <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-4 flex flex-col justify-between">
                 <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Velocidad</span>
                 <div class="text-3xl font-bold text-purple-400 mt-2"><span id="wpmCounter">0</span> <span class="text-sm font-normal text-slate-400">PPM</span></div>
             </div>
 
-            <!-- Métrica: Muletillas -->
             <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-4 flex flex-col justify-between">
                 <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Muletillas</span>
                 <div class="text-3xl font-bold text-rose-400 mt-2" id="fillerCounter">0</div>
             </div>
 
-            <!-- Métrica: Informalismos -->
             <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-4 flex flex-col justify-between">
                 <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Informalismos</span>
                 <div class="text-3xl font-bold text-amber-400 mt-2" id="slangCounter">0</div>
             </div>
         </section>
 
-        <!-- Bloque Central: Guion + Transcripción -->
+        <!-- Bloque Central: Guion y Transcripción -->
         <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-5 flex flex-col gap-3">
                 <div class="flex justify-between items-center">
@@ -71,7 +67,7 @@
                     </h2>
                     <span class="text-xs text-slate-400">Compara lectura vs. improvisación</span>
                 </div>
-                <textarea id="scriptInput" placeholder="Pega aquí el texto de tu presentación para medir qué tanto lees..." class="w-full h-44 bg-slate-950/70 border border-slate-800 rounded-lg p-3 text-xs font-mono text-slate-300 resize-none focus:outline-none focus:border-indigo-500/80 leading-relaxed"></textarea>
+                <textarea id="scriptInput" placeholder="Pega aquí el texto de tu presentación..." class="w-full h-44 bg-slate-950/70 border border-slate-800 rounded-lg p-3 text-xs font-mono text-slate-300 resize-none focus:outline-none focus:border-indigo-500/80 leading-relaxed"></textarea>
             </div>
 
             <div class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-5 flex flex-col">
@@ -99,7 +95,7 @@
             </div>
             <div id="fillersTagsContainer" class="flex flex-wrap gap-2 py-1 max-h-24 overflow-y-auto"></div>
             <div class="flex gap-2 mt-1">
-                <input type="text" id="newFillerInput" placeholder="Ej: literalmente, de alguna manera..." class="flex-1 bg-slate-950 border border-slate-700/80 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
+                <input type="text" id="newFillerInput" placeholder="Ej: literalmente..." class="flex-1 bg-slate-950 border border-slate-700/80 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
                 <button id="btnAddFiller" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium px-4 py-2 rounded-lg transition">+ Agregar</button>
             </div>
         </section>
@@ -108,7 +104,7 @@
         <section class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-5 flex flex-col gap-3">
             <div class="flex justify-between items-center">
                 <h2 class="text-sm font-semibold text-slate-300 flex items-center gap-2">
-                    <span>📈</span> Historial de Prácticas
+                    <span>📈</span> Historial de Prácticas Recientes
                 </h2>
                 <button id="btnClearHistory" class="text-xs text-slate-400 hover:text-rose-400 transition">Limpiar Historial</button>
             </div>
@@ -127,46 +123,11 @@
     <div id="pinModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
         <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl max-w-md w-full shadow-2xl text-center">
             <h3 class="text-xl font-bold text-slate-100 mb-2">Ingresa tu Licencia de Acceso</h3>
-            <p class="text-sm text-slate-400 mb-4">Introduce el PIN de suscripción adquirido para activar el simulador.</p>
-            <input type="text" id="pinInput" placeholder="Ej: EXPO-30D-8F2K9M-X" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-center text-lg font-mono text-slate-100 tracking-wider mb-4 focus:outline-none focus:border-indigo-500 uppercase">
+            <p class="text-sm text-slate-400 mb-4">Introduce el PIN de suscripción para activar el simulador.</p>
+            <input type="text" id="pinInput" placeholder="Ej: EXPO-30D-M4X9L2-A7B3" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-center text-lg font-mono text-slate-100 tracking-wider mb-4 focus:outline-none focus:border-indigo-500 uppercase">
             <button id="btnValidatePin" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 rounded-xl transition">
                 Validar Licencia
             </button>
-        </div>
-    </div>
-
-    <!-- Modal Panel Administrador (Para Generar Licencias) -->
-    <div id="adminModal" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4 z-50">
-        <div class="bg-slate-900 border border-indigo-500/40 p-6 rounded-2xl max-w-md w-full shadow-2xl flex flex-col gap-4">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-                <h3 class="text-lg font-bold text-indigo-400 flex items-center gap-2">
-                    <span>🔐</span> Panel Administrador - Crear PINs
-                </h3>
-                <button id="btnCloseAdmin" class="text-slate-400 hover:text-slate-200">✕</button>
-            </div>
-            
-            <p class="text-xs text-slate-400">Selecciona la duración de la suscripción para generar un PIN aleatorio con fecha de vencimiento integrada:</p>
-
-            <div class="flex flex-col gap-2">
-                <label class="text-xs text-slate-300 font-semibold">Duración de la Licencia:</label>
-                <select id="adminDuration" class="bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
-                    <option value="7">7 Días (Demo Corta)</option>
-                    <option value="15">15 Días</option>
-                    <option value="30" selected>30 Días (1 Mes)</option>
-                    <option value="90">90 Días (1 Trimestre)</option>
-                    <option value="365">365 Días (1 Año)</option>
-                </select>
-            </div>
-
-            <button id="btnGenerateKey" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2.5 rounded-xl transition text-sm">
-                ⚡ Generar Nuevo PIN Aleatorio
-            </button>
-
-            <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl flex flex-col gap-2">
-                <span class="text-xs text-slate-400">PIN Generado (Listo para enviar al cliente):</span>
-                <input type="text" id="adminGeneratedPin" readonly class="bg-slate-900 text-emerald-400 font-mono text-center font-bold p-2 rounded border border-slate-800 select-all" placeholder="Haz clic en Generar...">
-                <button id="btnCopyAdminPin" class="bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 py-1.5 rounded transition">📋 Copiar PIN</button>
-            </div>
         </div>
     </div>
 
@@ -203,8 +164,16 @@
         </div>
     </div>
 
-    <!-- Script Principal con Motor de Licencias Cifradas -->
+    <!-- SCRIPT PRINCIPAL DEL SISTEMA -->
     <script>
+        // =========================================================================
+        // 🔑 CONFIGURACIÓN DE JSONBIN (MODIFICA AQUÍ TUS CLAVES)
+        // =========================================================================
+        const JSONBIN_BIN_ID = "6adbeb12ac6210605a4d7d65"; 
+        const JSONBIN_API_KEY = "$2a$10$7RpYf6VyMjN9TO7Vkyr4L.lW42KZgcnAPLRr/c8K4FyWkSS5MiMr2";
+        const SECRET_SALT = "PALTA_SECRET_2026";
+        // =========================================================================
+
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
         if (!SpeechRecognition) {
@@ -215,8 +184,16 @@
             recognition.continuous = true;
             recognition.interimResults = true;
 
-            const SECRET_SALT = "PALTA_SECRET_2026"; // Clave secreta para firmar licencias
-            const ADMIN_PIN = "ADMIN2026";            // PIN Maestro del Administrador
+            // Identificador Único de Dispositivo (Laptop / Celular)
+            function getOrCreateDeviceId() {
+                let deviceId = localStorage.getItem('device_hardware_id');
+                if (!deviceId) {
+                    deviceId = 'DEV-' + Math.random().toString(36).substring(2, 10).toUpperCase() + '-' + Date.now().toString(36).toUpperCase();
+                    localStorage.setItem('device_hardware_id', deviceId);
+                }
+                return deviceId;
+            }
+            const currentDeviceId = getOrCreateDeviceId();
 
             // DOM Elements
             const btnToggle = document.getElementById('btnToggle');
@@ -230,22 +207,11 @@
             const timeGoalSelect = document.getElementById('timeGoalSelect');
             const scriptInput = document.getElementById('scriptInput');
 
-            // PIN Modal Elements
             const pinModal = document.getElementById('pinModal');
             const pinInput = document.getElementById('pinInput');
             const btnValidatePin = document.getElementById('btnValidatePin');
             const pinStatus = document.getElementById('pinStatus');
 
-            // Admin Elements
-            const logoIcon = document.getElementById('logoIcon');
-            const adminModal = document.getElementById('adminModal');
-            const btnCloseAdmin = document.getElementById('btnCloseAdmin');
-            const adminDuration = document.getElementById('adminDuration');
-            const btnGenerateKey = document.getElementById('btnGenerateKey');
-            const adminGeneratedPin = document.getElementById('adminGeneratedPin');
-            const btnCopyAdminPin = document.getElementById('btnCopyAdminPin');
-
-            // Report & History Elements
             const reportModal = document.getElementById('reportModal');
             const reportScore = document.getElementById('reportScore');
             const repDuration = document.getElementById('repDuration');
@@ -276,8 +242,7 @@
             let detectedFillersMap = {};
             let detectedSlangMap = {};
 
-            // --- SISTEMA DE CIFRADO Y VALIDACIÓN DE PINs ---
-            
+            // Hash para verificar la integridad del PIN
             function simpleHash(str) {
                 let hash = 0;
                 for (let i = 0; i < str.length; i++) {
@@ -287,44 +252,80 @@
                 return Math.abs(hash).toString(36).toUpperCase();
             }
 
-            // Función para que el Administrador genere un PIN
-            function generateLicensePin(days) {
-                const expirationMs = Date.now() + (days * 86400000);
-                const timeCode = expirationMs.toString(36).toUpperCase();
-                const randomPart = Math.random().toString(36).substring(2, 6).toUpperCase();
-                const checksum = simpleHash(`${timeCode}-${SECRET_SALT}-${randomPart}`);
-                return `EXPO-${days}D-${timeCode}-${randomPart}-${checksum.substring(0, 4)}`;
-            }
+            // Validar Licencia en la nube mediante JSONBin (Máximo 2 Dispositivos)
+            async function verifyLicensePinCloud(pinStr) {
+                const clean = pinStr.trim().toUpperCase();
 
-            // Función para validar un PIN ingresado
-            function verifyLicensePin(pinStr) {
-                if (pinStr.trim().toUpperCase() === "PALTA2026" || pinStr.trim().toUpperCase() === "DEMO-2026") {
-                    return { valid: true, expDate: Date.now() + (30 * 86400000) }; // PIN demo retrocompatible
+                // Claves de demostración rápida
+                if (clean === "PALTA2026" || clean === "DEMO-2026") {
+                    return { valid: true, expDate: Date.now() + (30 * 86400000) };
                 }
 
-                const parts = pinStr.trim().toUpperCase().split('-');
-                if (parts.length !== 5 || parts[0] !== 'EXPO') return { valid: false, reason: "Formato de PIN inválido." };
+                // 1. Validar formato del PIN
+                const parts = clean.split('-');
+                if (parts.length !== 5 || parts[0] !== 'EXPO') {
+                    return { valid: false, reason: "Formato de PIN inválido." };
+                }
 
                 const timeCode = parts[2];
-                const randomPart = parts[3];
+                const rand = parts[3];
                 const providedChecksum = parts[4];
-                const expectedChecksum = simpleHash(`${timeCode}-${SECRET_SALT}-${randomPart}`).substring(0, 4);
+                const expectedChecksum = simpleHash(`${timeCode}-${SECRET_SALT}-${rand}`).substring(0, 4);
 
                 if (providedChecksum !== expectedChecksum) {
-                    return { valid: false, reason: "El PIN ingresado es incorrecto o alterado." };
+                    return { valid: false, reason: "El PIN ingresado no es auténtico." };
                 }
 
-                const expirationMs = parseInt(timeCode, 36);
-                if (isNaN(expirationMs)) return { valid: false, reason: "Fecha inválida." };
-
-                if (Date.now() > expirationMs) {
-                    return { valid: false, reason: "Esta licencia de acceso ya ha expirado." };
+                const expMs = parseInt(timeCode, 36);
+                if (isNaN(expMs) || Date.now() > expMs) {
+                    return { valid: false, reason: "Esta licencia de acceso ha expirado." };
                 }
 
-                return { valid: true, expDate: expirationMs };
+                // 2. Consulta en la nube
+                if (!JSONBIN_BIN_ID || JSONBIN_BIN_ID.includes("PEGA_AQUÍ")) {
+                    return { valid: false, reason: "Falta configurar el BIN ID de JSONBin en el código." };
+                }
+
+                try {
+                    const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
+                        headers: { "X-Master-Key": JSONBIN_API_KEY }
+                    });
+                    const data = await response.json();
+                    let record = data.record || {};
+
+                    let devicesBound = record[clean] || [];
+
+                    // Si este dispositivo ya está registrado
+                    if (devicesBound.includes(currentDeviceId)) {
+                        return { valid: true, expDate: expMs };
+                    }
+
+                    // Si ya hay 2 dispositivos registrados para esta clave
+                    if (devicesBound.length >= 2) {
+                        return { valid: false, reason: "Límite alcanzado: Este PIN ya se usa en 2 dispositivos (Laptop y Celular)." };
+                    }
+
+                    // Registrar este nuevo dispositivo
+                    devicesBound.push(currentDeviceId);
+                    record[clean] = devicesBound;
+
+                    await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-Master-Key": JSONBIN_API_KEY
+                        },
+                        body: JSON.stringify(record)
+                    });
+
+                    return { valid: true, expDate: expMs };
+
+                } catch (err) {
+                    console.error("Error al conectar con la base de datos:", err);
+                    return { valid: false, reason: "Error de conexión al validar la licencia." };
+                }
             }
 
-            // Verificar si el usuario ya tiene una licencia activa guardada
             function checkActiveLicense() {
                 const savedExp = localStorage.getItem('user_license_exp');
                 if (savedExp) {
@@ -343,57 +344,28 @@
                 return false;
             }
 
-            // Modo Admin oculto: Hacer clic 5 veces seguidas en el icono de micrófono 🎙️
-            let logoClickCount = 0;
-            logoIcon.addEventListener('click', () => {
-                logoClickCount++;
-                if (logoClickCount >= 5) {
-                    logoClickCount = 0;
-                    adminModal.classList.remove('hidden');
-                }
-            });
+            btnValidatePin.addEventListener('click', async () => {
+                btnValidatePin.textContent = "Validando...";
+                btnValidatePin.disabled = true;
 
-            btnCloseAdmin.addEventListener('click', () => adminModal.classList.add('hidden'));
+                const result = await verifyLicensePinCloud(pinInput.value);
+                
+                btnValidatePin.textContent = "Validar Licencia";
+                btnValidatePin.disabled = false;
 
-            btnGenerateKey.addEventListener('click', () => {
-                const days = parseInt(adminDuration.value);
-                const generated = generateLicensePin(days);
-                adminGeneratedPin.value = generated;
-            });
-
-            btnCopyAdminPin.addEventListener('click', () => {
-                if (adminGeneratedPin.value) {
-                    navigator.clipboard.writeText(adminGeneratedPin.value);
-                    alert("¡PIN copiado al portapapeles! Ya puedes enviarlo a tu comprador.");
-                }
-            });
-
-            // Validar PIN ingresado por el cliente
-            btnValidatePin.addEventListener('click', () => {
-                const entered = pinInput.value.trim().toUpperCase();
-
-                if (entered === ADMIN_PIN) {
-                    pinModal.classList.add('hidden');
-                    adminModal.classList.remove('hidden');
-                    return;
-                }
-
-                const result = verifyLicensePin(entered);
                 if (result.valid) {
                     localStorage.setItem('user_license_exp', result.expDate.toString());
                     pinModal.classList.add('hidden');
                     checkActiveLicense();
-                    alert("¡Licencia activada con éxito! Bienvenido al simulador.");
+                    alert("¡Licencia activada con éxito!");
                 } else {
                     alert(`Error: ${result.reason}`);
                 }
             });
 
-            // Cargar estado inicial
             checkActiveLicense();
 
-            // --- LÓGICA DE SIMULADOR DE VOZ ---
-
+            // Lógica del Simulador
             function renderFillerTags() {
                 fillersTagsContainer.innerHTML = '';
                 fillerWords.forEach((word, index) => {
