@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador Anti-Palta - Entrenador de Exposiciones</title>
+    <title>Simulador para Exposiciones</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -14,7 +14,7 @@
         <div class="flex items-center gap-3">
             <span class="text-2xl">🎙️</span>
             <h1 class="text-xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-                Simulador Anti-Palta
+                Simulador para Exposiciones
             </h1>
         </div>
         <div class="flex items-center gap-3">
@@ -81,8 +81,51 @@
         </div>
     </div>
 
-    <!-- Script de Captura de Voz y Detección de Muletillas -->
-    <!-- Script de Captura de Voz, Detección Avanzada de Muletillas, Repeticiones y PIN -->
+    <!-- Modal de Reporte Post-Exposición -->
+    <div id="reportModal" class="hidden fixed inset-0 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 z-50">
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl max-w-lg w-full shadow-2xl flex flex-col gap-5">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h3 class="text-xl font-bold text-indigo-400 flex items-center gap-2">
+                    <span>📊</span> Reporte de Exposición
+                </h3>
+                <span id="reportScore" class="text-2xl font-extrabold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-xl">--/100</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 text-sm">
+                <div class="bg-slate-950/50 p-3 rounded-lg border border-slate-800">
+                    <span class="text-xs text-slate-400 block">Duración Total</span>
+                    <strong id="repDuration" class="text-lg text-slate-200">00:00</strong>
+                </div>
+                <div class="bg-slate-950/50 p-3 rounded-lg border border-slate-800">
+                    <span class="text-xs text-slate-400 block">Velocidad Promedio</span>
+                    <strong id="repWPM" class="text-lg text-slate-200">0 PPM</strong>
+                </div>
+            </div>
+
+            <div class="bg-slate-950/50 p-4 rounded-lg border border-slate-800 flex flex-col gap-1">
+                <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Diagnóstico de Ritmo</span>
+                <p id="repDiagnosis" class="text-sm font-medium text-slate-300">--</p>
+            </div>
+
+            <div class="bg-slate-950/50 p-4 rounded-lg border border-slate-800 flex flex-col gap-2">
+                <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Desglose de Muletillas</span>
+                <div id="repFillersList" class="text-sm text-slate-300 max-h-32 overflow-y-auto space-y-1">
+                    Sin muletillas registradas.
+                </div>
+            </div>
+
+            <div class="flex gap-3 pt-2">
+                <button id="btnCopyReport" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold py-2.5 rounded-xl transition text-sm flex items-center justify-center gap-2">
+                    📋 Copiar Reporte
+                </button>
+                <button id="btnCloseReport" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2.5 rounded-xl transition text-sm">
+                    Aceptar y Reiniciar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script Principal -->
     <script>
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
@@ -94,7 +137,7 @@
             recognition.continuous = true;
             recognition.interimResults = true;
 
-            // Elementos del DOM
+            // DOM Elements
             const btnToggle = document.getElementById('btnToggle');
             const btnText = document.getElementById('btnText');
             const output = document.getElementById('output');
@@ -103,16 +146,25 @@
             const wpmCounterEl = document.getElementById('wpmCounter');
             const fillerCounterEl = document.getElementById('fillerCounter');
             
-            // Elementos del Modal de PIN
+            // Modal PIN Elements
             const pinModal = document.getElementById('pinModal');
             const pinInput = document.getElementById('pinInput');
             const btnValidatePin = document.getElementById('btnValidatePin');
             const pinStatus = document.getElementById('pinStatus');
 
+            // Modal Report Elements
+            const reportModal = document.getElementById('reportModal');
+            const reportScore = document.getElementById('reportScore');
+            const repDuration = document.getElementById('repDuration');
+            const repWPM = document.getElementById('repWPM');
+            const repDiagnosis = document.getElementById('repDiagnosis');
+            const repFillersList = document.getElementById('repFillersList');
+            const btnCopyReport = document.getElementById('btnCopyReport');
+            const btnCloseReport = document.getElementById('btnCloseReport');
+
             const VALID_PINS = ['PALTA2026', 'DEMO-2026', 'EXPO100'];
             let isPinUnlocked = false;
 
-            // Lista ampliada de muletillas y sonidos de duda
             const FILLER_WORDS = [
                 'este', 'estee', 'estooo', 'esto', 
                 'o sea', 'osea', 
@@ -123,8 +175,10 @@
             let isListening = false;
             let startTime = null;
             let timerInterval = null;
+            let totalSecondsElapsed = 0;
+            let lastRawText = '';
+            let detectedFillersMap = {};
 
-            // Validación de PIN
             btnValidatePin.addEventListener('click', () => {
                 const enteredPin = pinInput.value.trim().toUpperCase();
                 if (VALID_PINS.includes(enteredPin)) {
@@ -146,8 +200,8 @@
             function startTimer() {
                 startTime = Date.now();
                 timerInterval = setInterval(() => {
-                    const elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
-                    timerEl.textContent = formatTime(elapsedSeconds);
+                    totalSecondsElapsed = Math.floor((Date.now() - startTime) / 1000);
+                    timerEl.textContent = formatTime(totalSecondsElapsed);
                 }, 1000);
             }
 
@@ -155,11 +209,10 @@
                 clearInterval(timerInterval);
             }
 
-            // Analizador en tiempo real
             function processTranscript(rawText) {
                 if (!rawText.trim()) return;
+                lastRawText = rawText;
 
-                // 1. Conteo de palabras totales y Velocidad (PPM)
                 const wordsArray = rawText.trim().split(/\s+/);
                 const totalWords = wordsArray.length;
                 const elapsedMinutes = Math.max((Date.now() - startTime) / 60000, 1 / 60);
@@ -168,21 +221,27 @@
 
                 let fillerCount = 0;
                 let processedText = rawText;
+                detectedFillersMap = {};
 
-                // 2. DETECCIÓN A: Palabras repetidas consecutivamente (ej: "y y", "que que", "de de")
+                // A: Repeticiones
                 const repeatRegex = /\b(\w+)\s+\1\b/gi;
                 const repeatMatches = rawText.match(repeatRegex);
                 if (repeatMatches) {
                     fillerCount += repeatMatches.length;
+                    repeatMatches.forEach(m => {
+                        const lower = m.toLowerCase();
+                        detectedFillersMap[lower] = (detectedFillersMap[lower] || 0) + 1;
+                    });
                     processedText = processedText.replace(repeatRegex, '<mark class="bg-amber-500/30 text-amber-300 font-semibold px-1 rounded border border-amber-500/40">$1 $1</mark>');
                 }
 
-                // 3. DETECCIÓN B: Lista de muletillas y vocalizaciones ("este", "eee", "o sea", "bueno")
+                // B: Muletillas
                 FILLER_WORDS.forEach(filler => {
                     const regex = new RegExp(`\\b(${filler})\\b`, 'gi');
                     const matches = rawText.match(regex);
                     if (matches) {
                         fillerCount += matches.length;
+                        detectedFillersMap[filler] = (detectedFillersMap[filler] || 0) + matches.length;
                     }
                     processedText = processedText.replace(regex, '<mark class="bg-rose-500/30 text-rose-300 font-semibold px-1 rounded border border-rose-500/40">$1</mark>');
                 });
@@ -191,7 +250,61 @@
                 output.innerHTML = processedText;
             }
 
-            // Control del botón principal
+            function generateReport() {
+                const finalWPM = parseInt(wpmCounterEl.textContent) || 0;
+                const totalFillers = parseInt(fillerCounterEl.textContent) || 0;
+
+                // Calificación (100 base, penalización por muletillas y ritmo)
+                let score = 100 - (totalFillers * 5);
+                if (finalWPM < 100 || finalWPM > 170) score -= 15;
+                if (score < 0) score = 0;
+
+                // Diagnóstico
+                let diagnosis = "✅ Ritmo fluido y adecuado para la audiencia.";
+                if (finalWPM < 100) diagnosis = "🐢 Velocidad lenta. Intenta hablar de forma más fluida.";
+                else if (finalWPM > 170) diagnosis = "⚡ Velocidad muy rápida. Haz pausas para que tu público asimile las ideas.";
+
+                repDuration.textContent = formatTime(totalSecondsElapsed);
+                repWPM.textContent = `${finalWPM} PPM`;
+                repDiagnosis.textContent = diagnosis;
+                reportScore.textContent = `${score}/100`;
+
+                // Lista de muletillas
+                const keys = Object.keys(detectedFillersMap);
+                if (keys.length === 0) {
+                    repFillersList.innerHTML = '<span class="text-emerald-400">¡Excelente! No se detectaron muletillas significativamente.</span>';
+                } else {
+                    repFillersList.innerHTML = keys.map(k => 
+                        `<div class="flex justify-between border-b border-slate-800/60 py-1">
+                            <span class="capitalize text-rose-300">${k}</span>
+                            <span class="font-bold text-slate-400">${detectedFillersMap[k]} vez/veces</span>
+                         </div>`
+                    ).join('');
+                }
+
+                reportModal.classList.remove('hidden');
+            }
+
+            btnCopyReport.addEventListener('click', () => {
+                const textToCopy = `--- REPORTE: SIMULADOR PARA EXPOSICIONES ---
+Puntaje: ${reportScore.textContent}
+Duración: ${repDuration.textContent}
+Velocidad: ${repWPM.textContent}
+Diagnóstico: ${repDiagnosis.textContent}
+Muletillas detectadas: ${fillerCounterEl.textContent}`;
+                
+                navigator.clipboard.writeText(textToCopy);
+                alert("¡Reporte copiado al portapapeles!");
+            });
+
+            btnCloseReport.addEventListener('click', () => {
+                reportModal.classList.add('hidden');
+                output.textContent = 'Haz clic en "Iniciar Escucha" para comenzar la práctica...';
+                timerEl.textContent = '00:00';
+                wpmCounterEl.textContent = '0';
+                fillerCounterEl.textContent = '0';
+            });
+
             btnToggle.addEventListener('click', () => {
                 if (!isPinUnlocked) {
                     pinModal.classList.remove('hidden');
@@ -226,6 +339,7 @@
                     listeningBadge.classList.remove('flex');
                     stopTimer();
                     isListening = false;
+                    generateReport();
                 }
             });
 
