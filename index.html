@@ -49,15 +49,38 @@
         </section>
 
         <!-- Área de Transcripción -->
-        <section class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-5 flex-1 flex flex-col min-h-[250px]">
+        <section class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-5 flex-1 flex flex-col min-h-[220px]">
             <div class="flex justify-between items-center mb-3">
                 <h2 class="text-sm font-semibold text-slate-300">Transcripción en Tiempo Real</h2>
                 <span id="listeningBadge" class="hidden items-center gap-2 text-xs text-rose-400 bg-rose-500/10 px-2.5 py-1 rounded-full border border-rose-500/20">
                     <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span> Escuchando
                 </span>
             </div>
-            <div id="output" class="flex-1 bg-slate-950/60 border border-slate-800 rounded-lg p-4 text-slate-300 font-mono text-sm leading-relaxed overflow-y-auto">
+            <div id="output" class="flex-1 bg-slate-950/60 border border-slate-800 rounded-lg p-4 text-slate-300 font-mono text-sm leading-relaxed overflow-y-auto min-h-[140px]">
                 Haz clic en "Iniciar Escucha" para comenzar la práctica...
+            </div>
+        </section>
+
+        <!-- Panel de Gestión de Muletillas Personalizadas -->
+        <section class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-5 flex flex-col gap-3">
+            <div class="flex justify-between items-center flex-wrap gap-2">
+                <h2 class="text-sm font-semibold text-slate-300 flex items-center gap-2">
+                    <span>⚙️</span> Personalizar Muletillas a Detectar
+                </h2>
+                <span class="text-xs text-slate-400">Haz clic en ✕ para eliminar o agrega nuevas abajo</span>
+            </div>
+            
+            <!-- Lista de etiquetas de muletillas -->
+            <div id="fillersTagsContainer" class="flex flex-wrap gap-2 py-1 max-h-28 overflow-y-auto">
+                <!-- Se cargan dinámicamente -->
+            </div>
+
+            <!-- Formulario para agregar muletilla -->
+            <div class="flex gap-2 mt-1">
+                <input type="text" id="newFillerInput" placeholder="Ej: literalmente, de alguna manera..." class="flex-1 bg-slate-950 border border-slate-700/80 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+                <button id="btnAddFiller" class="bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium px-4 py-2 rounded-lg transition">
+                    + Agregar
+                </button>
             </div>
         </section>
 
@@ -137,7 +160,7 @@
             recognition.continuous = true;
             recognition.interimResults = true;
 
-            // DOM Elements
+            // Elementos del DOM
             const btnToggle = document.getElementById('btnToggle');
             const btnText = document.getElementById('btnText');
             const output = document.getElementById('output');
@@ -146,13 +169,13 @@
             const wpmCounterEl = document.getElementById('wpmCounter');
             const fillerCounterEl = document.getElementById('fillerCounter');
             
-            // Modal PIN Elements
+            // Modal PIN
             const pinModal = document.getElementById('pinModal');
             const pinInput = document.getElementById('pinInput');
             const btnValidatePin = document.getElementById('btnValidatePin');
             const pinStatus = document.getElementById('pinStatus');
 
-            // Modal Report Elements
+            // Modal Reporte
             const reportModal = document.getElementById('reportModal');
             const reportScore = document.getElementById('reportScore');
             const repDuration = document.getElementById('repDuration');
@@ -162,22 +185,68 @@
             const btnCopyReport = document.getElementById('btnCopyReport');
             const btnCloseReport = document.getElementById('btnCloseReport');
 
+            // Gestión de Muletillas
+            const fillersTagsContainer = document.getElementById('fillersTagsContainer');
+            const newFillerInput = document.getElementById('newFillerInput');
+            const btnAddFiller = document.getElementById('btnAddFiller');
+
             const VALID_PINS = ['PALTA2026', 'DEMO-2026', 'EXPO100'];
             let isPinUnlocked = false;
 
-            const FILLER_WORDS = [
+            // Lista inicial o cargada de localStorage
+            const defaultFillers = [
                 'este', 'estee', 'estooo', 'esto', 
                 'o sea', 'osea', 
                 'nada', 'eh', 'ehh', 'eee', 'ee', 'em', 'emm', 'mmm',
                 'bueno', 'mira', 'sabes', 'tipo', 'ya', 'ajá'
             ];
 
+            let fillerWords = JSON.parse(localStorage.getItem('custom_fillers')) || defaultFillers;
+
             let isListening = false;
             let startTime = null;
             let timerInterval = null;
             let totalSecondsElapsed = 0;
-            let lastRawText = '';
             let detectedFillersMap = {};
+
+            // Renderizar etiquetas de muletillas en pantalla
+            function renderFillerTags() {
+                fillersTagsContainer.innerHTML = '';
+                fillerWords.forEach((word, index) => {
+                    const tag = document.createElement('span');
+                    tag.className = 'inline-flex items-center gap-1.5 bg-slate-900 text-slate-300 border border-slate-700/80 px-2.5 py-1 rounded-lg text-xs font-medium';
+                    tag.innerHTML = `
+                        <span>${word}</span>
+                        <button onclick="removeFiller(${index})" class="text-slate-500 hover:text-rose-400 font-bold ml-1 transition">✕</button>
+                    `;
+                    fillersTagsContainer.appendChild(tag);
+                });
+                localStorage.setItem('custom_fillers', JSON.stringify(fillerWords));
+            }
+
+            // Agregar muletilla
+            function addFiller() {
+                const val = newFillerInput.value.trim().toLowerCase();
+                if (val && !fillerWords.includes(val)) {
+                    fillerWords.push(val);
+                    renderFillerTags();
+                    newFillerInput.value = '';
+                }
+            }
+
+            // Eliminar muletilla
+            window.removeFiller = function(index) {
+                fillerWords.splice(index, 1);
+                renderFillerTags();
+            };
+
+            btnAddFiller.addEventListener('click', addFiller);
+            newFillerInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') addFiller();
+            });
+
+            // Inicializar renderizado de muletillas
+            renderFillerTags();
 
             btnValidatePin.addEventListener('click', () => {
                 const enteredPin = pinInput.value.trim().toUpperCase();
@@ -211,7 +280,6 @@
 
             function processTranscript(rawText) {
                 if (!rawText.trim()) return;
-                lastRawText = rawText;
 
                 const wordsArray = rawText.trim().split(/\s+/);
                 const totalWords = wordsArray.length;
@@ -223,7 +291,7 @@
                 let processedText = rawText;
                 detectedFillersMap = {};
 
-                // A: Repeticiones
+                // A: Repeticiones consecutivas
                 const repeatRegex = /\b(\w+)\s+\1\b/gi;
                 const repeatMatches = rawText.match(repeatRegex);
                 if (repeatMatches) {
@@ -235,8 +303,8 @@
                     processedText = processedText.replace(repeatRegex, '<mark class="bg-amber-500/30 text-amber-300 font-semibold px-1 rounded border border-amber-500/40">$1 $1</mark>');
                 }
 
-                // B: Muletillas
-                FILLER_WORDS.forEach(filler => {
+                // B: Muletillas dinámicas
+                fillerWords.forEach(filler => {
                     const regex = new RegExp(`\\b(${filler})\\b`, 'gi');
                     const matches = rawText.match(regex);
                     if (matches) {
@@ -254,12 +322,10 @@
                 const finalWPM = parseInt(wpmCounterEl.textContent) || 0;
                 const totalFillers = parseInt(fillerCounterEl.textContent) || 0;
 
-                // Calificación (100 base, penalización por muletillas y ritmo)
                 let score = 100 - (totalFillers * 5);
                 if (finalWPM < 100 || finalWPM > 170) score -= 15;
                 if (score < 0) score = 0;
 
-                // Diagnóstico
                 let diagnosis = "✅ Ritmo fluido y adecuado para la audiencia.";
                 if (finalWPM < 100) diagnosis = "🐢 Velocidad lenta. Intenta hablar de forma más fluida.";
                 else if (finalWPM > 170) diagnosis = "⚡ Velocidad muy rápida. Haz pausas para que tu público asimile las ideas.";
@@ -269,7 +335,6 @@
                 repDiagnosis.textContent = diagnosis;
                 reportScore.textContent = `${score}/100`;
 
-                // Lista de muletillas
                 const keys = Object.keys(detectedFillersMap);
                 if (keys.length === 0) {
                     repFillersList.innerHTML = '<span class="text-emerald-400">¡Excelente! No se detectaron muletillas significativamente.</span>';
