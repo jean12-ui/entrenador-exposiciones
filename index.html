@@ -12,14 +12,14 @@
     <!-- Encabezado -->
     <header class="border-b border-slate-800 bg-slate-950/50 backdrop-blur px-6 py-4 flex justify-between items-center">
         <div class="flex items-center gap-3">
-            <span class="text-2xl">🎙️</span>
+            <span class="text-2xl cursor-pointer" id="logoIcon" title="Haz clic 5 veces para Modo Admin">🎙️</span>
             <h1 class="text-xl font-bold bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
                 Simulador para Exposiciones <span class="text-xs font-semibold uppercase tracking-wider bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2 py-0.5 rounded-full ml-2">PRO Coach</span>
             </h1>
         </div>
         <div class="flex items-center gap-3">
-            <span id="pinStatus" class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs px-3 py-1 rounded-full font-medium">
-                PIN Activo: DEMO-2026
+            <span id="pinStatus" class="bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs px-3 py-1 rounded-full font-medium">
+                Sin Licencia Activa
             </span>
         </div>
     </header>
@@ -55,7 +55,7 @@
                 <div class="text-3xl font-bold text-rose-400 mt-2" id="fillerCounter">0</div>
             </div>
 
-            <!-- Métrica: Tono Informal / Jerga -->
+            <!-- Métrica: Informalismos -->
             <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-4 flex flex-col justify-between">
                 <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Informalismos</span>
                 <div class="text-3xl font-bold text-amber-400 mt-2" id="slangCounter">0</div>
@@ -64,8 +64,6 @@
 
         <!-- Bloque Central: Guion + Transcripción -->
         <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            
-            <!-- Panel Guion de Apoyo / Teleprompter -->
             <div class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-5 flex flex-col gap-3">
                 <div class="flex justify-between items-center">
                     <h2 class="text-sm font-semibold text-slate-300 flex items-center gap-2">
@@ -73,10 +71,9 @@
                     </h2>
                     <span class="text-xs text-slate-400">Compara lectura vs. improvisación</span>
                 </div>
-                <textarea id="scriptInput" placeholder="Pega aquí el texto de tu presentación o diapositivas para medir qué tanto lees de memoria..." class="w-full h-44 bg-slate-950/70 border border-slate-800 rounded-lg p-3 text-xs font-mono text-slate-300 resize-none focus:outline-none focus:border-indigo-500/80 leading-relaxed"></textarea>
+                <textarea id="scriptInput" placeholder="Pega aquí el texto de tu presentación para medir qué tanto lees..." class="w-full h-44 bg-slate-950/70 border border-slate-800 rounded-lg p-3 text-xs font-mono text-slate-300 resize-none focus:outline-none focus:border-indigo-500/80 leading-relaxed"></textarea>
             </div>
 
-            <!-- Área de Transcripción -->
             <div class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-5 flex flex-col">
                 <div class="flex justify-between items-center mb-3">
                     <h2 class="text-sm font-semibold text-slate-300 flex items-center gap-2">
@@ -92,39 +89,33 @@
             </div>
         </section>
 
-        <!-- Panel de Gestión de Muletillas Personalizadas -->
+        <!-- Panel Muletillas -->
         <section class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-5 flex flex-col gap-3">
             <div class="flex justify-between items-center flex-wrap gap-2">
                 <h2 class="text-sm font-semibold text-slate-300 flex items-center gap-2">
-                    <span>⚙️</span> Diccionario de Muletillas y Sonidos de Duda
+                    <span>⚙️</span> Diccionario de Muletillas
                 </h2>
                 <span class="text-xs text-slate-400">Haz clic en ✕ para eliminar</span>
             </div>
-            
             <div id="fillersTagsContainer" class="flex flex-wrap gap-2 py-1 max-h-24 overflow-y-auto"></div>
-
             <div class="flex gap-2 mt-1">
                 <input type="text" id="newFillerInput" placeholder="Ej: literalmente, de alguna manera..." class="flex-1 bg-slate-950 border border-slate-700/80 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
-                <button id="btnAddFiller" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium px-4 py-2 rounded-lg transition">
-                    + Agregar
-                </button>
+                <button id="btnAddFiller" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium px-4 py-2 rounded-lg transition">+ Agregar</button>
             </div>
         </section>
 
-        <!-- Historial de Prácticas -->
+        <!-- Historial -->
         <section class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-5 flex flex-col gap-3">
             <div class="flex justify-between items-center">
                 <h2 class="text-sm font-semibold text-slate-300 flex items-center gap-2">
-                    <span>📈</span> Historial de Prácticas Recientes
+                    <span>📈</span> Historial de Prácticas
                 </h2>
                 <button id="btnClearHistory" class="text-xs text-slate-400 hover:text-rose-400 transition">Limpiar Historial</button>
             </div>
-            <div id="historyContainer" class="text-xs text-slate-400 space-y-2 max-h-36 overflow-y-auto">
-                No hay prácticas grabadas aún.
-            </div>
+            <div id="historyContainer" class="text-xs text-slate-400 space-y-2 max-h-36 overflow-y-auto">No hay prácticas grabadas aún.</div>
         </section>
 
-        <!-- Panel de Control Principal -->
+        <!-- Control Principal -->
         <section class="flex justify-center items-center py-2">
             <button id="btnToggle" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-emerald-900/20 transition-all flex items-center gap-3 text-lg">
                 <span>🎙️</span> <span id="btnText">Iniciar Escucha</span>
@@ -132,73 +123,87 @@
         </section>
     </main>
 
-    <!-- Modal PIN -->
+    <!-- Modal PIN Usuario -->
     <div id="pinModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
         <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl max-w-md w-full shadow-2xl text-center">
-            <h3 class="text-xl font-bold text-slate-100 mb-2">Ingresa tu PIN de Acceso</h3>
-            <p class="text-sm text-slate-400 mb-6">Esta función requiere un PIN válido de la versión Freemium.</p>
-            <input type="text" id="pinInput" placeholder="Ej: PALTA2026" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-center text-lg font-mono text-slate-100 tracking-wider mb-4 focus:outline-none focus:border-indigo-500">
+            <h3 class="text-xl font-bold text-slate-100 mb-2">Ingresa tu Licencia de Acceso</h3>
+            <p class="text-sm text-slate-400 mb-4">Introduce el PIN de suscripción adquirido para activar el simulador.</p>
+            <input type="text" id="pinInput" placeholder="Ej: EXPO-30D-8F2K9M-X" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-center text-lg font-mono text-slate-100 tracking-wider mb-4 focus:outline-none focus:border-indigo-500 uppercase">
             <button id="btnValidatePin" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 rounded-xl transition">
-                Validar PIN
+                Validar Licencia
             </button>
         </div>
     </div>
 
-    <!-- Modal de Reporte Post-Exposición (PRO Coach) -->
-    <div id="reportModal" class="hidden fixed inset-0 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 z-50">
-        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl max-w-xl w-full shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto">
+    <!-- Modal Panel Administrador (Para Generar Licencias) -->
+    <div id="adminModal" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4 z-50">
+        <div class="bg-slate-900 border border-indigo-500/40 p-6 rounded-2xl max-w-md w-full shadow-2xl flex flex-col gap-4">
             <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-                <h3 class="text-xl font-bold text-indigo-400 flex items-center gap-2">
-                    <span>🏆</span> Reporte PRO Coach
+                <h3 class="text-lg font-bold text-indigo-400 flex items-center gap-2">
+                    <span>🔐</span> Panel Administrador - Crear PINs
                 </h3>
-                <span id="reportScore" class="text-2xl font-extrabold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-xl">--/100</span>
+                <button id="btnCloseAdmin" class="text-slate-400 hover:text-slate-200">✕</button>
+            </div>
+            
+            <p class="text-xs text-slate-400">Selecciona la duración de la suscripción para generar un PIN aleatorio con fecha de vencimiento integrada:</p>
+
+            <div class="flex flex-col gap-2">
+                <label class="text-xs text-slate-300 font-semibold">Duración de la Licencia:</label>
+                <select id="adminDuration" class="bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+                    <option value="7">7 Días (Demo Corta)</option>
+                    <option value="15">15 Días</option>
+                    <option value="30" selected>30 Días (1 Mes)</option>
+                    <option value="90">90 Días (1 Trimestre)</option>
+                    <option value="365">365 Días (1 Año)</option>
+                </select>
             </div>
 
-            <div class="grid grid-cols-3 gap-3 text-xs">
-                <div class="bg-slate-950/50 p-3 rounded-lg border border-slate-800 text-center">
-                    <span class="text-slate-400 block mb-1">Duración</span>
-                    <strong id="repDuration" class="text-base text-slate-200">00:00</strong>
-                </div>
-                <div class="bg-slate-950/50 p-3 rounded-lg border border-slate-800 text-center">
-                    <span class="text-slate-400 block mb-1">Velocidad</span>
-                    <strong id="repWPM" class="text-base text-slate-200">0 PPM</strong>
-                </div>
-                <div class="bg-slate-950/50 p-3 rounded-lg border border-slate-800 text-center">
-                    <span class="text-slate-400 block mb-1">Coincidencia Guion</span>
-                    <strong id="repScriptMatch" class="text-base text-indigo-400">N/A</strong>
-                </div>
-            </div>
+            <button id="btnGenerateKey" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2.5 rounded-xl transition text-sm">
+                ⚡ Generar Nuevo PIN Aleatorio
+            </button>
 
-            <!-- Diagnóstico de Ritmo y Tono -->
-            <div class="bg-slate-950/50 p-3.5 rounded-lg border border-slate-800 flex flex-col gap-1 text-xs">
-                <span class="font-semibold text-slate-400 uppercase tracking-wider">Diagnóstico de Oratoria</span>
-                <p id="repDiagnosis" class="text-slate-300 font-medium leading-relaxed">--</p>
-            </div>
-
-            <!-- Desglose de Muletillas e Informalismos -->
-            <div class="grid grid-cols-2 gap-3 text-xs">
-                <div class="bg-slate-950/50 p-3 rounded-lg border border-slate-800 flex flex-col gap-1">
-                    <span class="font-semibold text-slate-400 uppercase">Muletillas Detectadas</span>
-                    <div id="repFillersList" class="text-slate-300 max-h-24 overflow-y-auto space-y-1">Sin observaciones.</div>
-                </div>
-                <div class="bg-slate-950/50 p-3 rounded-lg border border-slate-800 flex flex-col gap-1">
-                    <span class="font-semibold text-slate-400 uppercase">Lenguaje Informal</span>
-                    <div id="repSlangList" class="text-slate-300 max-h-24 overflow-y-auto space-y-1">Sin informalismos.</div>
-                </div>
-            </div>
-
-            <div class="flex gap-3 pt-2">
-                <button id="btnCopyReport" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold py-2.5 rounded-xl transition text-xs flex items-center justify-center gap-2">
-                    📋 Copiar Reporte
-                </button>
-                <button id="btnCloseReport" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2.5 rounded-xl transition text-xs">
-                    Cerrar y Reiniciar
-                </button>
+            <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl flex flex-col gap-2">
+                <span class="text-xs text-slate-400">PIN Generado (Listo para enviar al cliente):</span>
+                <input type="text" id="adminGeneratedPin" readonly class="bg-slate-900 text-emerald-400 font-mono text-center font-bold p-2 rounded border border-slate-800 select-all" placeholder="Haz clic en Generar...">
+                <button id="btnCopyAdminPin" class="bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 py-1.5 rounded transition">📋 Copiar PIN</button>
             </div>
         </div>
     </div>
 
-    <!-- Script Principal -->
+    <!-- Modal Reporte -->
+    <div id="reportModal" class="hidden fixed inset-0 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 z-50">
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl max-w-xl w-full shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h3 class="text-xl font-bold text-indigo-400 flex items-center gap-2"><span>🏆</span> Reporte PRO Coach</h3>
+                <span id="reportScore" class="text-2xl font-extrabold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-xl">--/100</span>
+            </div>
+            <div class="grid grid-cols-3 gap-3 text-xs">
+                <div class="bg-slate-950/50 p-3 rounded-lg border border-slate-800 text-center"><span class="text-slate-400 block mb-1">Duración</span><strong id="repDuration" class="text-base text-slate-200">00:00</strong></div>
+                <div class="bg-slate-950/50 p-3 rounded-lg border border-slate-800 text-center"><span class="text-slate-400 block mb-1">Velocidad</span><strong id="repWPM" class="text-base text-slate-200">0 PPM</strong></div>
+                <div class="bg-slate-950/50 p-3 rounded-lg border border-slate-800 text-center"><span class="text-slate-400 block mb-1">Coincidencia Guion</span><strong id="repScriptMatch" class="text-base text-indigo-400">N/A</strong></div>
+            </div>
+            <div class="bg-slate-950/50 p-3.5 rounded-lg border border-slate-800 flex flex-col gap-1 text-xs">
+                <span class="font-semibold text-slate-400 uppercase tracking-wider">Diagnóstico</span>
+                <p id="repDiagnosis" class="text-slate-300 font-medium leading-relaxed">--</p>
+            </div>
+            <div class="grid grid-cols-2 gap-3 text-xs">
+                <div class="bg-slate-950/50 p-3 rounded-lg border border-slate-800 flex flex-col gap-1">
+                    <span class="font-semibold text-slate-400 uppercase">Muletillas</span>
+                    <div id="repFillersList" class="text-slate-300 max-h-24 overflow-y-auto space-y-1">Sin observaciones.</div>
+                </div>
+                <div class="bg-slate-950/50 p-3 rounded-lg border border-slate-800 flex flex-col gap-1">
+                    <span class="font-semibold text-slate-400 uppercase">Informalismos</span>
+                    <div id="repSlangList" class="text-slate-300 max-h-24 overflow-y-auto space-y-1">Sin informalismos.</div>
+                </div>
+            </div>
+            <div class="flex gap-3 pt-2">
+                <button id="btnCopyReport" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold py-2.5 rounded-xl transition text-xs flex items-center justify-center gap-2">📋 Copiar Reporte</button>
+                <button id="btnCloseReport" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2.5 rounded-xl transition text-xs">Cerrar y Reiniciar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script Principal con Motor de Licencias Cifradas -->
     <script>
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
@@ -210,7 +215,10 @@
             recognition.continuous = true;
             recognition.interimResults = true;
 
-            // Elementos del DOM
+            const SECRET_SALT = "PALTA_SECRET_2026"; // Clave secreta para firmar licencias
+            const ADMIN_PIN = "ADMIN2026";            // PIN Maestro del Administrador
+
+            // DOM Elements
             const btnToggle = document.getElementById('btnToggle');
             const btnText = document.getElementById('btnText');
             const output = document.getElementById('output');
@@ -222,13 +230,22 @@
             const timeGoalSelect = document.getElementById('timeGoalSelect');
             const scriptInput = document.getElementById('scriptInput');
 
-            // Modal PIN
+            // PIN Modal Elements
             const pinModal = document.getElementById('pinModal');
             const pinInput = document.getElementById('pinInput');
             const btnValidatePin = document.getElementById('btnValidatePin');
             const pinStatus = document.getElementById('pinStatus');
 
-            // Modal Reporte
+            // Admin Elements
+            const logoIcon = document.getElementById('logoIcon');
+            const adminModal = document.getElementById('adminModal');
+            const btnCloseAdmin = document.getElementById('btnCloseAdmin');
+            const adminDuration = document.getElementById('adminDuration');
+            const btnGenerateKey = document.getElementById('btnGenerateKey');
+            const adminGeneratedPin = document.getElementById('adminGeneratedPin');
+            const btnCopyAdminPin = document.getElementById('btnCopyAdminPin');
+
+            // Report & History Elements
             const reportModal = document.getElementById('reportModal');
             const reportScore = document.getElementById('reportScore');
             const repDuration = document.getElementById('repDuration');
@@ -240,29 +257,14 @@
             const btnCopyReport = document.getElementById('btnCopyReport');
             const btnCloseReport = document.getElementById('btnCloseReport');
 
-            // Gestión Muletillas
             const fillersTagsContainer = document.getElementById('fillersTagsContainer');
             const newFillerInput = document.getElementById('newFillerInput');
             const btnAddFiller = document.getElementById('btnAddFiller');
-
-            // Historial
             const historyContainer = document.getElementById('historyContainer');
             const btnClearHistory = document.getElementById('btnClearHistory');
 
-            const VALID_PINS = ['PALTA2026', 'DEMO-2026', 'EXPO100'];
-            let isPinUnlocked = false;
-
-            const defaultFillers = [
-                'este', 'estee', 'estooo', 'esto', 
-                'o sea', 'osea', 'nada', 'eh', 'ehh', 'eee', 'ee', 'em', 'emm', 'mmm',
-                'bueno', 'mira', 'sabes', 'tipo', 'ya', 'ajá'
-            ];
-
-            // Palabras o modismos informales a corregir para exposiciones formales
-            const SLANG_WORDS = [
-                'osea', 'o sea', 'tipo', 'literal', 'literalmente', 'man', 'causa', 
-                'al toque', 'ch&eacute;vere', 'chevere', 'pue', 'pe', 'mira', 'nada'
-            ];
+            const defaultFillers = ['este', 'estee', 'estooo', 'esto', 'o sea', 'osea', 'nada', 'eh', 'ehh', 'eee', 'ee', 'em', 'emm', 'mmm', 'bueno', 'mira', 'sabes', 'tipo', 'ya', 'ajá'];
+            const SLANG_WORDS = ['osea', 'o sea', 'tipo', 'literal', 'literalmente', 'man', 'causa', 'al toque', 'chévere', 'chevere', 'pue', 'pe', 'mira', 'nada'];
 
             let fillerWords = JSON.parse(localStorage.getItem('custom_fillers')) || defaultFillers;
             let practiceHistory = JSON.parse(localStorage.getItem('practice_history')) || [];
@@ -274,15 +276,130 @@
             let detectedFillersMap = {};
             let detectedSlangMap = {};
 
+            // --- SISTEMA DE CIFRADO Y VALIDACIÓN DE PINs ---
+            
+            function simpleHash(str) {
+                let hash = 0;
+                for (let i = 0; i < str.length; i++) {
+                    hash = (hash << 5) - hash + str.charCodeAt(i);
+                    hash |= 0;
+                }
+                return Math.abs(hash).toString(36).toUpperCase();
+            }
+
+            // Función para que el Administrador genere un PIN
+            function generateLicensePin(days) {
+                const expirationMs = Date.now() + (days * 86400000);
+                const timeCode = expirationMs.toString(36).toUpperCase();
+                const randomPart = Math.random().toString(36).substring(2, 6).toUpperCase();
+                const checksum = simpleHash(`${timeCode}-${SECRET_SALT}-${randomPart}`);
+                return `EXPO-${days}D-${timeCode}-${randomPart}-${checksum.substring(0, 4)}`;
+            }
+
+            // Función para validar un PIN ingresado
+            function verifyLicensePin(pinStr) {
+                if (pinStr.trim().toUpperCase() === "PALTA2026" || pinStr.trim().toUpperCase() === "DEMO-2026") {
+                    return { valid: true, expDate: Date.now() + (30 * 86400000) }; // PIN demo retrocompatible
+                }
+
+                const parts = pinStr.trim().toUpperCase().split('-');
+                if (parts.length !== 5 || parts[0] !== 'EXPO') return { valid: false, reason: "Formato de PIN inválido." };
+
+                const timeCode = parts[2];
+                const randomPart = parts[3];
+                const providedChecksum = parts[4];
+                const expectedChecksum = simpleHash(`${timeCode}-${SECRET_SALT}-${randomPart}`).substring(0, 4);
+
+                if (providedChecksum !== expectedChecksum) {
+                    return { valid: false, reason: "El PIN ingresado es incorrecto o alterado." };
+                }
+
+                const expirationMs = parseInt(timeCode, 36);
+                if (isNaN(expirationMs)) return { valid: false, reason: "Fecha inválida." };
+
+                if (Date.now() > expirationMs) {
+                    return { valid: false, reason: "Esta licencia de acceso ya ha expirado." };
+                }
+
+                return { valid: true, expDate: expirationMs };
+            }
+
+            // Verificar si el usuario ya tiene una licencia activa guardada
+            function checkActiveLicense() {
+                const savedExp = localStorage.getItem('user_license_exp');
+                if (savedExp) {
+                    const expMs = parseInt(savedExp);
+                    if (Date.now() < expMs) {
+                        const dateStr = new Date(expMs).toLocaleDateString('es-PE');
+                        pinStatus.textContent = `Licencia Activa hasta: ${dateStr}`;
+                        pinStatus.className = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs px-3 py-1 rounded-full font-medium";
+                        return true;
+                    } else {
+                        localStorage.removeItem('user_license_exp');
+                        pinStatus.textContent = "Licencia Expirada";
+                        pinStatus.className = "bg-rose-500/10 text-rose-400 border border-rose-500/20 text-xs px-3 py-1 rounded-full font-medium";
+                    }
+                }
+                return false;
+            }
+
+            // Modo Admin oculto: Hacer clic 5 veces seguidas en el icono de micrófono 🎙️
+            let logoClickCount = 0;
+            logoIcon.addEventListener('click', () => {
+                logoClickCount++;
+                if (logoClickCount >= 5) {
+                    logoClickCount = 0;
+                    adminModal.classList.remove('hidden');
+                }
+            });
+
+            btnCloseAdmin.addEventListener('click', () => adminModal.classList.add('hidden'));
+
+            btnGenerateKey.addEventListener('click', () => {
+                const days = parseInt(adminDuration.value);
+                const generated = generateLicensePin(days);
+                adminGeneratedPin.value = generated;
+            });
+
+            btnCopyAdminPin.addEventListener('click', () => {
+                if (adminGeneratedPin.value) {
+                    navigator.clipboard.writeText(adminGeneratedPin.value);
+                    alert("¡PIN copiado al portapapeles! Ya puedes enviarlo a tu comprador.");
+                }
+            });
+
+            // Validar PIN ingresado por el cliente
+            btnValidatePin.addEventListener('click', () => {
+                const entered = pinInput.value.trim().toUpperCase();
+
+                if (entered === ADMIN_PIN) {
+                    pinModal.classList.add('hidden');
+                    adminModal.classList.remove('hidden');
+                    return;
+                }
+
+                const result = verifyLicensePin(entered);
+                if (result.valid) {
+                    localStorage.setItem('user_license_exp', result.expDate.toString());
+                    pinModal.classList.add('hidden');
+                    checkActiveLicense();
+                    alert("¡Licencia activada con éxito! Bienvenido al simulador.");
+                } else {
+                    alert(`Error: ${result.reason}`);
+                }
+            });
+
+            // Cargar estado inicial
+            checkActiveLicense();
+
+            // --- LÓGICA DE SIMULADOR DE VOZ ---
+
             function renderFillerTags() {
                 fillersTagsContainer.innerHTML = '';
                 fillerWords.forEach((word, index) => {
                     const tag = document.createElement('span');
                     tag.className = 'inline-flex items-center gap-1.5 bg-slate-900 text-slate-300 border border-slate-700/80 px-2.5 py-1 rounded-lg text-xs font-medium';
-                    tag.innerHTML = `
-                        <span>${word}</span>
-                        <button onclick="removeFiller(${index})" class="text-slate-500 hover:text-rose-400 font-bold ml-1 transition">✕</button>
-                    `;
+                    tag.innerHTML = `<span>${word}</span><button onclick="removeFiller(${index})" class="text-slate-500 hover:text-rose-400 font-bold ml-1 transition">✕</button>`;
                     fillersTagsContainer.appendChild(tag);
                 });
                 localStorage.setItem('custom_fillers', JSON.stringify(fillerWords));
@@ -303,10 +420,7 @@
             };
 
             btnAddFiller.addEventListener('click', addFiller);
-            newFillerInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') addFiller();
-            });
-
+            newFillerInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') addFiller(); });
             renderFillerTags();
 
             function renderHistory() {
@@ -316,15 +430,8 @@
                 }
                 historyContainer.innerHTML = practiceHistory.slice(-5).reverse().map(item => `
                     <div class="flex justify-between items-center bg-slate-950/60 border border-slate-800 p-2.5 rounded-lg text-xs">
-                        <div>
-                            <span class="text-indigo-400 font-semibold">${item.date}</span> - 
-                            <span class="text-slate-300">${item.duration}</span> | 
-                            <span class="text-purple-300">${item.wpm} PPM</span>
-                        </div>
-                        <div class="flex gap-2 items-center">
-                            <span class="text-rose-400 font-medium">${item.fillers} mul.</span>
-                            <span class="bg-emerald-500/10 text-emerald-400 font-bold px-2 py-0.5 rounded border border-emerald-500/20">${item.score}/100</span>
-                        </div>
+                        <div><span class="text-indigo-400 font-semibold">${item.date}</span> - <span class="text-slate-300">${item.duration}</span> | <span class="text-purple-300">${item.wpm} PPM</span></div>
+                        <div class="flex gap-2 items-center"><span class="text-rose-400 font-medium">${item.fillers} mul.</span><span class="bg-emerald-500/10 text-emerald-400 font-bold px-2 py-0.5 rounded border border-emerald-500/20">${item.score}/100</span></div>
                     </div>
                 `).join('');
             }
@@ -334,20 +441,7 @@
                 localStorage.removeItem('practice_history');
                 renderHistory();
             });
-
             renderHistory();
-
-            btnValidatePin.addEventListener('click', () => {
-                const enteredPin = pinInput.value.trim().toUpperCase();
-                if (VALID_PINS.includes(enteredPin)) {
-                    isPinUnlocked = true;
-                    pinModal.classList.add('hidden');
-                    pinStatus.textContent = `PIN Activo: ${enteredPin}`;
-                    alert("¡PIN Validado correctamente!");
-                } else {
-                    alert("PIN inválido. Ejemplo: PALTA2026.");
-                }
-            });
 
             function formatTime(seconds) {
                 const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
@@ -358,11 +452,9 @@
             function startTimer() {
                 startTime = Date.now();
                 const goalSeconds = parseInt(timeGoalSelect.value);
-
                 timerInterval = setInterval(() => {
                     totalSecondsElapsed = Math.floor((Date.now() - startTime) / 1000);
                     timerEl.textContent = formatTime(totalSecondsElapsed);
-
                     if (goalSeconds > 0 && totalSecondsElapsed >= goalSeconds) {
                         alert("⏱️ ¡Alcanzaste el límite de tiempo configurado!");
                         btnToggle.click();
@@ -370,13 +462,10 @@
                 }, 1000);
             }
 
-            function stopTimer() {
-                clearInterval(timerInterval);
-            }
+            function stopTimer() { clearInterval(timerInterval); }
 
             function processTranscript(rawText) {
                 if (!rawText.trim()) return;
-
                 const wordsArray = rawText.trim().split(/\s+/);
                 const totalWords = wordsArray.length;
                 const elapsedMinutes = Math.max((Date.now() - startTime) / 60000, 1 / 60);
@@ -389,7 +478,6 @@
                 detectedFillersMap = {};
                 detectedSlangMap = {};
 
-                // A: Repeticiones consecutivas
                 const repeatRegex = /\b(\w+)\s+\1\b/gi;
                 const repeatMatches = rawText.match(repeatRegex);
                 if (repeatMatches) {
@@ -401,7 +489,6 @@
                     processedText = processedText.replace(repeatRegex, '<mark class="bg-amber-500/30 text-amber-300 font-semibold px-1 rounded border border-amber-500/40">$1 $1</mark>');
                 }
 
-                // B: Muletillas
                 fillerWords.forEach(filler => {
                     const regex = new RegExp(`\\b(${filler})\\b`, 'gi');
                     const matches = rawText.match(regex);
@@ -412,7 +499,6 @@
                     processedText = processedText.replace(regex, '<mark class="bg-rose-500/30 text-rose-300 font-semibold px-1 rounded border border-rose-500/40">$1</mark>');
                 });
 
-                // C: Informalismos / Jerga
                 SLANG_WORDS.forEach(slang => {
                     const regex = new RegExp(`\\b(${slang})\\b`, 'gi');
                     const matches = rawText.match(regex);
@@ -427,19 +513,13 @@
                 output.innerHTML = processedText;
             }
 
-            // Cálculo de coincidencia con guion (Modo Lectura vs Improvisación)
             function calculateScriptCoincidence(spokenText, scriptText) {
                 if (!scriptText.trim()) return null;
-                
                 const spokenWords = new Set(spokenText.toLowerCase().match(/\b\w+\b/g) || []);
                 const scriptWords = scriptText.toLowerCase().match(/\b\w+\b/g) || [];
                 if (scriptWords.length === 0) return null;
-
                 let matches = 0;
-                scriptWords.forEach(word => {
-                    if (spokenWords.has(word)) matches++;
-                });
-
+                scriptWords.forEach(word => { if (spokenWords.has(word)) matches++; });
                 return Math.round((matches / scriptWords.length) * 100);
             }
 
@@ -452,13 +532,11 @@
 
                 const coincidence = calculateScriptCoincidence(rawSpoken, scriptText);
 
-                // Cálculo de Puntaje Global (100 base)
                 let score = 100 - (totalFillers * 4) - (totalSlang * 5);
                 if (finalWPM < 100 || finalWPM > 170) score -= 10;
-                if (coincidence !== null && coincidence > 85) score -= 10; // Penaliza lectura robótica de memoria
+                if (coincidence !== null && coincidence > 85) score -= 10;
                 if (score < 0) score = 0;
 
-                // Diagnóstico integrado
                 let diagnosis = [];
                 if (finalWPM < 100) diagnosis.push("🐢 **Ritmo Lento:** Aumenta la velocidad para mantener el interés.");
                 else if (finalWPM > 170) diagnosis.push("⚡ **Demasiado Rápido:** Haz pausas estratégicas para que el público procese la información.");
@@ -476,42 +554,20 @@
                 repDiagnosis.innerHTML = diagnosis.join('<br>');
                 reportScore.textContent = `${score}/100`;
 
-                // Desglose Muletillas
                 const fillerKeys = Object.keys(detectedFillersMap);
-                if (fillerKeys.length === 0) {
-                    repFillersList.innerHTML = '<span class="text-emerald-400">Sin muletillas registradas.</span>';
-                } else {
-                    repFillersList.innerHTML = fillerKeys.map(k => 
-                        `<div class="flex justify-between border-b border-slate-800/60 py-0.5">
-                            <span class="capitalize text-rose-300">${k}</span>
-                            <span class="font-bold text-slate-400">${detectedFillersMap[k]}x</span>
-                         </div>`
-                    ).join('');
-                }
+                repFillersList.innerHTML = fillerKeys.length === 0 ? '<span class="text-emerald-400">Sin muletillas registradas.</span>' : fillerKeys.map(k => `<div class="flex justify-between border-b border-slate-800/60 py-0.5"><span class="capitalize text-rose-300">${k}</span><span class="font-bold text-slate-400">${detectedFillersMap[k]}x</span></div>`).join('');
 
-                // Desglose Lenguaje Informal
                 const slangKeys = Object.keys(detectedSlangMap);
-                if (slangKeys.length === 0) {
-                    repSlangList.innerHTML = '<span class="text-emerald-400">Uso de lenguaje formal correcto.</span>';
-                } else {
-                    repSlangList.innerHTML = slangKeys.map(k => 
-                        `<div class="flex justify-between border-b border-slate-800/60 py-0.5">
-                            <span class="capitalize text-amber-300">${k}</span>
-                            <span class="font-bold text-slate-400">${detectedSlangMap[k]}x</span>
-                         </div>`
-                    ).join('');
-                }
+                repSlangList.innerHTML = slangKeys.length === 0 ? '<span class="text-emerald-400">Uso de lenguaje formal correcto.</span>' : slangKeys.map(k => `<div class="flex justify-between border-b border-slate-800/60 py-0.5"><span class="capitalize text-amber-300">${k}</span><span class="font-bold text-slate-400">${detectedSlangMap[k]}x</span></div>`).join('');
 
-                // Guardar en Historial
                 const now = new Date();
-                const sessionRecord = {
+                practiceHistory.push({
                     date: `${now.toLocaleDateString('es-PE')} ${now.toLocaleTimeString('es-PE', {hour: '2-digit', minute:'2-digit'})}`,
                     duration: formatTime(totalSecondsElapsed),
                     wpm: finalWPM,
                     fillers: totalFillers,
                     score: score
-                };
-                practiceHistory.push(sessionRecord);
+                });
                 localStorage.setItem('practice_history', JSON.stringify(practiceHistory));
                 renderHistory();
 
@@ -525,7 +581,6 @@ Duración: ${repDuration.textContent}
 Velocidad: ${repWPM.textContent}
 Coincidencia Guion: ${repScriptMatch.textContent}
 Muletillas: ${fillerCounterEl.textContent} | Informalismos: ${slangCounterEl.textContent}`;
-                
                 navigator.clipboard.writeText(textToCopy);
                 alert("¡Reporte copiado al portapapeles!");
             });
@@ -540,7 +595,7 @@ Muletillas: ${fillerCounterEl.textContent} | Informalismos: ${slangCounterEl.tex
             });
 
             btnToggle.addEventListener('click', () => {
-                if (!isPinUnlocked) {
+                if (!checkActiveLicense()) {
                     pinModal.classList.remove('hidden');
                     return;
                 }
@@ -554,17 +609,13 @@ Muletillas: ${fillerCounterEl.textContent} | Informalismos: ${slangCounterEl.tex
                         listeningBadge.classList.remove('hidden');
                         listeningBadge.classList.add('flex');
                         output.textContent = 'Escuchando... habla ahora.';
-                        
                         timerEl.textContent = '00:00';
                         wpmCounterEl.textContent = '0';
                         fillerCounterEl.textContent = '0';
                         slangCounterEl.textContent = '0';
                         startTimer();
-                        
                         isListening = true;
-                    } catch (err) {
-                        console.error("Error al iniciar reconocimiento:", err);
-                    }
+                    } catch (err) { console.error("Error al iniciar reconocimiento:", err); }
                 } else {
                     recognition.stop();
                     btnText.textContent = 'Iniciar Escucha';
@@ -586,9 +637,7 @@ Muletillas: ${fillerCounterEl.textContent} | Informalismos: ${slangCounterEl.tex
                 processTranscript(transcript);
             };
 
-            recognition.onerror = (event) => {
-                console.error("Error de reconocimiento:", event.error);
-            };
+            recognition.onerror = (event) => { console.error("Error de reconocimiento:", event.error); };
         }
     </script>
 </body>
